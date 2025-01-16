@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class ExpenseItem extends StatelessWidget {
+  IconData icon;
+  Color? color;
+  String title;
+  String description;
   String date;
   String amount;
-  ExpenseItem(
-      {super.key,
-      required this.date,
-      required this.amount});
+  String innerAmount;
+  ExpenseItem({super.key, required this.date, required this.amount, required this.icon, required this.color, required this.description, required this.innerAmount, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -46,14 +48,58 @@ class ExpenseItem extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Divider(color: Colors.grey[300], thickness: 1),
-             
-              Expanded(
-                child: ListView.builder(itemBuilder: (_ , index){
-                  return ExpenseDetails();
-                }),
-              )
+              ListView.builder(physics: const NeverScrollableScrollPhysics(), shrinkWrap: true, itemCount: 2, itemBuilder: (_, index) {
+                // physics - Prevents nested scrolling conflict
+                // shrinkWrap - Makes inner ListView take only as much height as needed
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Row(
+                    children: [
+                      Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          color: color!.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(icon, color: color),
+                      ),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              title,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Text(
+                              description,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Text(
+                        amount,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.red[400],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              })
             ],
           ),
         ),

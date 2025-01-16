@@ -200,19 +200,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 8),
-            // Expanded(
-            //   child: ListView.builder(
-            //       itemCount: 2,
-            //       itemBuilder: (_, builder) {
-            //         return ExpenseItem(
-            //             title: 'shop', desc: 'Buy new clothes', amount: '\$80');
-            //       }),
-            // )
+            const SizedBox(height: 8),
             Expanded(child: ListView.builder(itemCount: 2, itemBuilder: (_ , index){
               return ExpenseItem(
                 date: 'Tuesday, 14',
-                amount: '-\$1380',
+                amount: '-\$1380', icon: Icons.shopping_cart, color: Colors.blue[400], description: 'Buy new clothes', innerAmount: '-\$90', title: 'Shop',
                 
               );
             }))
