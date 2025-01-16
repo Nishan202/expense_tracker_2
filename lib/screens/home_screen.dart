@@ -213,22 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
               return ExpenseItem(
                 date: 'Tuesday, 14',
                 amount: '-\$1380',
-                items: [
-                  ExpenseDetails(
-                    icon: Icons.shopping_cart,
-                    color: Colors.blue[400],
-                    title: 'Shop',
-                    subtitle: 'Buy new clothes',
-                    amount: '-\$90',
-                  ),
-                  ExpenseDetails(
-                    icon: Icons.phone_iphone,
-                    color: Colors.orange[400],
-                    title: 'Electronic',
-                    subtitle: 'Buy new iPhone 14',
-                    amount: '-\$1290',
-                  ),
-                ],
+                
               );
             }))
           ],

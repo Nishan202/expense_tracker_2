@@ -4,14 +4,14 @@ class ExpenseDetails extends StatelessWidget {
   final IconData icon;
   final Color? color;
   final String title;
-  final String subtitle;
+  final String description;
   final String amount;
   const ExpenseDetails(
       {super.key,
       required this.icon,
       this.color,
       required this.title,
-      required this.subtitle,
+      required this.description,
       required this.amount});
 
   @override
@@ -42,7 +42,7 @@ class ExpenseDetails extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  subtitle,
+                  description,
                   style: TextStyle(
                     fontSize: 14,
                     color: Colors.grey[600],

@@ -5,14 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class ExpenseItem extends StatelessWidget {
-  // IconData icon;
   String date;
   String amount;
-  final List<ExpenseDetails> items;
   ExpenseItem(
       {super.key,
       required this.date,
-      required this.items,
       required this.amount});
 
   @override
@@ -51,8 +48,12 @@ class ExpenseItem extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Divider(color: Colors.grey[300], thickness: 1),
-              ...items.map((item) => item),
-              // SizedBox(height: 16),
+             
+              Expanded(
+                child: ListView.builder(itemBuilder: (_ , index){
+                  return ExpenseDetails();
+                }),
+              )
             ],
           ),
         ),
