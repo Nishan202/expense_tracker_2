@@ -1,4 +1,3 @@
-import 'package:expense_tracker_2/screens/chat_gpt.dart';
 import 'package:expense_tracker_2/screens/home_screen.dart';
 import 'package:expense_tracker_2/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
