@@ -17,26 +17,29 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Map<String, dynamic>> expenseList = [
     {
       "date": "Tuesday, 14",
-      "total": -1380,
+      "totalAmount": -1380,
       "items": [
         {
-          "category": "Shop",
+          'icon': Icons.shopping_cart,
+          "title": "Shop",
           "description": "Buy new clothes",
           "amount": -90,
         },
         {
-          "category": "Electronic",
+          'icon': Icons.phone_iphone,
+          "title": "Electronic",
           "description": "Buy new iPhone 14",
-          "amount": -1290,
+          "amount": -190,
         },
       ],
     },
     {
       "date": "Monday, 13",
-      "total": -60,
+      "totalAmount": -1260,
       "items": [
         {
-          "category": "Transportation",
+          'icon': Icons.card_travel,
+          "title": "Transportation",
           "description": "Trip to Malang",
           "amount": -60,
         },
@@ -68,7 +71,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-            IconButton(onPressed: (){}, icon: Icon(Icons.search, color: Colors.black,)),
+            IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.search,
+                  color: Colors.black,
+                )),
           ],
         ),
       ),
@@ -201,13 +209,18 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             const SizedBox(height: 8),
-            Expanded(child: ListView.builder(itemCount: 2, itemBuilder: (_ , index){
-              return ExpenseItem(
-                date: 'Tuesday, 14',
-                amount: '-\$1380', icon: Icons.shopping_cart, color: Colors.blue[400], description: 'Buy new clothes', innerAmount: '-\$90', title: 'Shop',
-                
-              );
-            }))
+            Expanded(
+              child: ListView.builder(
+                itemCount: expenseList.length,
+                itemBuilder: (_, index) {
+                  return ExpenseItem(
+                    date: expenseList[index]['date'],
+                    totalAmount: expenseList[index]['totalAmount'],
+                    expenseItemDetails: expenseList[index]['items'],
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

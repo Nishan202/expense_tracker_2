@@ -1,18 +1,15 @@
-import 'package:expense_tracker_2/utils/asset_management.dart';
 import 'package:expense_tracker_2/widgets/expense_details.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class ExpenseItem extends StatelessWidget {
-  IconData icon;
-  Color? color;
-  String title;
-  String description;
+  List<Map<String, dynamic>> expenseItemDetails;
   String date;
-  String amount;
-  String innerAmount;
-  ExpenseItem({super.key, required this.date, required this.amount, required this.icon, required this.color, required this.description, required this.innerAmount, required this.title});
+  String totalAmount;
+  ExpenseItem(
+      {super.key,
+      required this.date,
+      required this.totalAmount,
+      required this.expenseItemDetails});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +36,7 @@ class ExpenseItem extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    amount,
+                    totalAmount,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -50,109 +47,21 @@ class ExpenseItem extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Divider(color: Colors.grey[300], thickness: 1),
-              ListView.builder(physics: const NeverScrollableScrollPhysics(), shrinkWrap: true, itemCount: 2, itemBuilder: (_, index) {
-                // physics - Prevents nested scrolling conflict
-                // shrinkWrap - Makes inner ListView take only as much height as needed
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Row(
-                    children: [
-                      Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          color: color!.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Icon(icon, color: color),
-                      ),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              title,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                            Text(
-                              description,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Text(
-                        amount,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Colors.red[400],
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              })
+              ListView.builder(
+                physics: const NeverScrollableScrollPhysics(), // -> Prevents nested scrolling conflict
+                shrinkWrap: true, // -> Makes inner ListView take only as much height as needed
+                itemCount: expenseItemDetails.length,
+                itemBuilder: (_, index) {
+                  return ExpenseDetails(
+                      icon: expenseItemDetails[index]['icon'],
+                      title: expenseItemDetails[index]['title'],
+                      description: expenseItemDetails[index]['description'],
+                      amount: expenseItemDetails[index]['amount']);
+                },
+              )
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _expenseSubItem(String title, String description, String amount) {
-    // return ListTile(
-    //   leading: Container(
-    //     height: 50,
-    //     width: 50,
-    //     decoration: const BoxDecoration(
-    //       color: Colors.redAccent,
-    //       borderRadius: BorderRadius.all(Radius.circular(5)),
-    //       shape: BoxShape.rectangle,
-    //     ),
-    //     child: Icon(Icons.shopping_cart),
-    //   ),
-    //   title: Text(title, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-    //   subtitle: Text(description, style: TextStyle(color: Colors.grey),),
-    //   trailing: Text(amount , style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-    // );
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        children: [
-          Container(
-            height: 50,
-            width: 50,
-            decoration: BoxDecoration(
-              color: Colour.componentColor,
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-              shape: BoxShape.rectangle,
-            ),
-            child: Icon(Icons.shopping_cart),
-          ),
-          SizedBox(width: 8),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              Text(description, style: TextStyle(color: Colors.grey)),
-            ],
-          ),
-          Spacer(),
-          Text(amount,
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.redAccent)),
-        ],
       ),
     );
   }
