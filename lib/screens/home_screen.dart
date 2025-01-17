@@ -215,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemBuilder: (_, index) {
                   return ExpenseItem(
                     date: expenseList[index]['date'],
-                    totalAmount: expenseList[index]['totalAmount'],
+                    totalAmount: expenseList[index]['totalAmount'].toString(),
                     expenseItemDetails: expenseList[index]['items'],
                   );
                 },

@@ -56,7 +56,7 @@ class ExpenseItem extends StatelessWidget {
                       icon: expenseItemDetails[index]['icon'],
                       title: expenseItemDetails[index]['title'],
                       description: expenseItemDetails[index]['description'],
-                      amount: expenseItemDetails[index]['amount']);
+                      amount: expenseItemDetails[index]['amount'].toString());
                 },
               )
             ],
