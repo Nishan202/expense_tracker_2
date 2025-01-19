@@ -1,7 +1,9 @@
-import 'package:expense_tracker_2/widgets/expense_details.dart';
-import 'package:expense_tracker_2/widgets/expense_item.dart';
+import 'package:expense_tracker_2/domain/app_routes.dart';
+import 'package:expense_tracker_2/ui/screens/notification_screen.dart';
+import 'package:expense_tracker_2/ui/screens/statistics_screen.dart';
+import 'package:expense_tracker_2/ui/widgets/expense_item.dart';
 import 'package:flutter/material.dart';
-import 'package:expense_tracker_2/utils/asset_management.dart';
+import 'package:expense_tracker_2/domain/asset_management.dart';
 
 const List<String> month = <String>['This Month', 'February', 'March', 'April'];
 
@@ -14,6 +16,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String dropDownValue = month.first;
+  int currentPageIndex = 0;
+  List<Widget> navPage = [
+    HomeScreen(),
+    StatisticsScreen(),
+    NotificationScreen(),
+  ];
   List<Map<String, dynamic>> expenseList = [
     {
       "date": "Tuesday, 14",
@@ -21,12 +29,14 @@ class _HomeScreenState extends State<HomeScreen> {
       "items": [
         {
           'icon': Icons.shopping_cart,
+          // "color" : Colors.amber,
           "title": "Shop",
           "description": "Buy new clothes",
           "amount": -90,
         },
         {
           'icon': Icons.phone_iphone,
+          "color": Colors.green[200],
           "title": "Electronic",
           "description": "Buy new iPhone 14",
           "amount": -190,
@@ -39,9 +49,30 @@ class _HomeScreenState extends State<HomeScreen> {
       "items": [
         {
           'icon': Icons.card_travel,
+          "color": Colors.purple[100],
           "title": "Transportation",
           "description": "Trip to Malang",
           "amount": -60,
+        },
+      ],
+    },
+    {
+      "date": "Tuesday, 14",
+      "totalAmount": -1380,
+      "items": [
+        {
+          'icon': Icons.shopping_cart,
+          "color": Colors.blue[200],
+          "title": "Shop",
+          "description": "Buy new clothes",
+          "amount": -90,
+        },
+        {
+          'icon': Icons.phone_iphone,
+          "color": Colors.red[100],
+          "title": "Electronic",
+          "description": "Buy new iPhone 14",
+          "amount": -190,
         },
       ],
     },
@@ -72,16 +103,17 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.search,
-                  color: Colors.black,
-                )),
+              onPressed: () {},
+              icon: Icon(
+                Icons.search,
+                color: Colors.black,
+              ),
+            ),
           ],
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -140,6 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 24,
             ),
+
             // Expense Summary Card
             Container(
               padding: EdgeInsets.all(16),
@@ -147,53 +180,63 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Color(0xFF4C61DB),
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Expense total',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    '\$3,734',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Row(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFFF6464),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Text(
-                          '+\$240',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 8),
                       Text(
-                        'than last month',
+                        'Expense total',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 12,
+                          fontSize: 16,
                         ),
                       ),
+                      SizedBox(height: 8),
+                      Text(
+                        '\$3,734',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: Color(0xFFFF6464),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Text(
+                              '+\$240',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            'than last month',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
+                  ),
+                  Icon(
+                    Icons.monetization_on,
+                    color: Colors.white,
+                    size: 90,
                   ),
                 ],
               ),
@@ -224,30 +267,36 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: [
-          BottomNavigationBarItem(
+      bottomNavigationBar: NavigationBar(
+        destinations: [
+          NavigationDestination(
             icon: Icon(Icons.home),
-            label: '',
+            label: 'Home',
           ),
-          BottomNavigationBarItem(
+          NavigationDestination(
             icon: Icon(Icons.bar_chart),
-            label: '',
+            label: 'Statistics',
           ),
-          BottomNavigationBarItem(
+          NavigationDestination(
             icon: Icon(Icons.add),
-            label: '',
+            label: 'Add item',
           ),
-          BottomNavigationBarItem(
+          NavigationDestination(
             icon: Icon(Icons.notifications),
-            label: '',
+            label: 'Notification',
           ),
-          BottomNavigationBarItem(
+          NavigationDestination(
             icon: Icon(Icons.person),
-            label: '',
+            label: 'Profile',
           ),
         ],
+        // selectedIndex: selectedIndex,
+        onDestinationSelected: (value) {
+          // selectedIndex = value;
+          setState(() {
+            currentPageIndex = value;
+          });
+        },
       ),
     );
   }

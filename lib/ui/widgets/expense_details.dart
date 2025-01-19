@@ -24,10 +24,10 @@ class ExpenseDetails extends StatelessWidget {
             height: 40,
             width: 40,
             decoration: BoxDecoration(
-              color: color!.withOpacity(0.1),
+              color: color ?? Colors.white30,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon, color: color),
+            child: Icon(icon),
           ),
           SizedBox(width: 12),
           Expanded(

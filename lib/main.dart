@@ -1,5 +1,8 @@
-import 'package:expense_tracker_2/screens/home_screen.dart';
-import 'package:expense_tracker_2/screens/splash_screen.dart';
+import 'package:expense_tracker_2/domain/app_routes.dart';
+import 'package:expense_tracker_2/ui/screens/home_screen.dart';
+import 'package:expense_tracker_2/ui/screens/login_screen.dart';
+import 'package:expense_tracker_2/ui/screens/registration_screen.dart';
+import 'package:expense_tracker_2/ui/screens/statistics_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -18,7 +21,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: HomeScreen()
+      // initialRoute: AppRoutes.SPLASH_SCREEN_ROUTE,
+      // routes: AppRoutes.pageRoute,
+      home: RegistrationScreen(),
     );
   }
 }
