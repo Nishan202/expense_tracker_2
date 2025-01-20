@@ -1,3 +1,4 @@
+import 'package:expense_tracker_2/domain/app_routes.dart';
 import 'package:expense_tracker_2/ui/widgets/custom_button.dart';
 import 'package:expense_tracker_2/ui/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Already have an account?', style: TextStyle(fontSize: 16),),
-                TextButton(onPressed: (){}, child: Text('Sign in', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.indigo),),)
+                TextButton(onPressed: () => Navigator.pushReplacementNamed(context, AppRoutes.LOGIN_SCREEN_ROUTE), child: Text('Sign in', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.indigo),),)
               ],
             )
           ],

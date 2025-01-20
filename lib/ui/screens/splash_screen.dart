@@ -15,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, AppRoutes.HOME_SCREEN_ROUTE);
+      Navigator.pushReplacementNamed(context, AppRoutes.LOGIN_SCREEN_ROUTE);
     });
   }
 
@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           children: [
             Image.asset(
-              Assets.splash_screen_img,
+              Assets.expense_tracker_image,
               fit: BoxFit.cover,
             ),
             const SizedBox(
@@ -37,7 +37,8 @@ class _SplashScreenState extends State<SplashScreen> {
             const SizedBox(
               height: 15,
             ),
-            const Text('Safe your future by managing your expense right now', style: TextStyle(fontSize: 20, color: Colors.grey),)
+            const Text('Safe your future by managing your', style: TextStyle(fontSize: 20, color: Colors.grey),),
+            const Text('expense right now', style: TextStyle(fontSize: 20, color: Colors.grey),)
           ],
         ),
       ),

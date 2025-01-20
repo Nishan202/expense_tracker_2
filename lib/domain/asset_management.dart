@@ -4,6 +4,7 @@ class Assets {
   static const String splash_screen_img = 'assets/images/splash.png';
   static const String home_screen_image = 'assets/images/img1.png';
   static const String login_screen_image = 'assets/images/login.png';
+  static const String expense_tracker_image = 'assets/images/statistics_img.png';
 }
 
 class Colour {

@@ -1,3 +1,4 @@
+import 'package:expense_tracker_2/domain/app_routes.dart';
 import 'package:expense_tracker_2/domain/asset_management.dart';
 import 'package:expense_tracker_2/ui/widgets/custom_button.dart';
 import 'package:expense_tracker_2/ui/widgets/custom_textfield.dart';
@@ -20,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Padding(padding: EdgeInsets.all(15), child: SingleChildScrollView(
         child: Column(
           children: [
-            Image.asset(Assets.login_screen_image, height: 200,),
+            Image.asset(Assets.login_screen_image, height: 170,),
             Align(alignment: Alignment.topLeft, child: Text('Login', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black),)),
             const SizedBox(height: 8,),
             Align(alignment: Alignment.topLeft, child: Text('Please sign in your account to get started!', style: TextStyle(color: Colors.grey, fontSize: 16),)),
@@ -28,12 +29,19 @@ class _LoginScreenState extends State<LoginScreen> {
             CustomTextfield(controller: _emailController, labelText: 'Email',),
             const SizedBox(height: 10,),
             CustomTextfield(labelText: 'Password', controller: _passwordController),
-            Align(
-              alignment: Alignment.topRight,
-              child: TextButton(onPressed: (){}, child: Text('Forgot password')),
-            ),
+            // Align(
+            //   alignment: Alignment.topRight,
+            //   child: TextButton(onPressed: (){}, child: Text('Forgot password')),
+            // ),
             const SizedBox(height: 15,),
-            CustomButton(title: 'Sign In', onClick: (){})
+            CustomButton(title: 'Sign In', onClick: () => Navigator.pushReplacementNamed(context, AppRoutes.HOME_SCREEN_ROUTE),),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Don't have an account?", style: TextStyle(fontSize: 16),),
+                TextButton(onPressed: () => Navigator.pushReplacementNamed(context, AppRoutes.REGISTRATION_SCREEN_ROUTE), child: Text('Sign Up', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.indigo),),)
+              ],
+            )
           ],
         ),
       ),),
