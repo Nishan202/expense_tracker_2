@@ -5,8 +5,6 @@ import 'package:expense_tracker_2/ui/widgets/expense_item.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_tracker_2/domain/asset_management.dart';
 
-const List<String> month = <String>['This Month', 'February', 'March', 'April'];
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -15,13 +13,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String dropDownValue = month.first;
-  int currentPageIndex = 0;
-  List<Widget> navPage = [
-    HomeScreen(),
-    StatisticsScreen(),
-    NotificationScreen(),
-  ];
+  List<String> monthDropdownMenu = <String>['This Month', 'February', 'March', 'April'];
   List<Map<String, dynamic>> expenseList = [
     {
       "date": "Tuesday, 14",
@@ -153,20 +145,26 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
-                DropdownButton<String>(
-                  value: dropDownValue,
-                  items: month.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
+                // DropdownButton<String>(
+                //   value: dropDownValue,
+                //   items: month.map<DropdownMenuItem<String>>((String value) {
+                //     return DropdownMenuItem<String>(
+                //       value: value,
+                //       child: Text(value),
+                //     );
+                //   }).toList(),
+                //   onChanged: (value) {
+                //     setState(() {
+                //       dropDownValue = value!;
+                //     });
+                //   },
+                // ),
+                DropdownMenu(
+                  // inputDecorationTheme: InputDecorationTheme(fillColor: Colors.indigo[100], focusColor: Colors.green, outlineBorder: BorderSide(width: 2, style: BorderStyle.solid)),
+                  dropdownMenuEntries: monthDropdownMenu.map((value) {
+                    return DropdownMenuEntry(value: value, label: value);
                   }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      dropDownValue = value!;
-                    });
-                  },
-                ),
+                )
               ],
             ),
             const SizedBox(
@@ -266,37 +264,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: NavigationBar(
-        destinations: [
-          NavigationDestination(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.bar_chart),
-            label: 'Statistics',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.add),
-            label: 'Add item',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.notifications),
-            label: 'Notification',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-        // selectedIndex: selectedIndex,
-        onDestinationSelected: (value) {
-          // selectedIndex = value;
-          setState(() {
-            currentPageIndex = value;
-          });
-        },
       ),
     );
   }

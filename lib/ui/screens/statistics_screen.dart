@@ -1,8 +1,6 @@
 import 'package:expense_tracker_2/ui/widgets/statistics_expense_details.dart';
 import 'package:flutter/material.dart';
 
-const List<String> month = <String>['This Month', 'February', 'March', 'April'];
-
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({super.key});
 
@@ -11,7 +9,20 @@ class StatisticsScreen extends StatefulWidget {
 }
 
 class _StatisticsScreenState extends State<StatisticsScreen> {
-  String dropDownValue = month.first;
+  List<String> monthDropdownMenu = <String>[
+    'This Month',
+    'February',
+    'March',
+    'April'
+  ];
+
+  List<String> graphDropdownMenu = <String>[
+    'Week',
+    'Month',
+    'Year'
+  ];
+
+
   List<Map<String, dynamic>> expeseDetails = [
     {
       "icon": Icons.shopping_cart,
@@ -28,25 +39,25 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     {
       "icon": Icons.bike_scooter,
       "title": "bike",
-      "color" : Colors.yellow[100],
+      "color": Colors.yellow[100],
       "amount": -2000,
     },
     {
       "icon": Icons.movie,
       "title": "Movie",
-      "color" : Colors.orange[100],
+      "color": Colors.orange[100],
       "amount": -20,
     },
     {
       "icon": Icons.food_bank,
       "title": "Food",
-      "color" : Colors.pink[100],
+      "color": Colors.pink[100],
       "amount": -10,
     },
     {
       "icon": Icons.airlines,
       "title": "Flight ticket Lorem ipsum",
-      "color" : Colors.indigo[300],
+      "color": Colors.indigo[300],
       "amount": -10,
     }
   ];
@@ -66,20 +77,25 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   'Statistics',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
-                DropdownButton<String>(
-                  value: dropDownValue,
-                  items: month.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
+                // DropdownButton<String>(
+                //   value: dropDownValue,
+                //   items: month.map<DropdownMenuItem<String>>((String value) {
+                //     return DropdownMenuItem<String>(
+                //       value: value,
+                //       child: Text(value),
+                //     );
+                //   }).toList(),
+                //   onChanged: (value) {
+                //     setState(() {
+                //       dropDownValue = value!;
+                //     });
+                //   },
+                // ),
+                DropdownMenu(
+                  dropdownMenuEntries: monthDropdownMenu.map((value) {
+                    return DropdownMenuEntry(value: value, label: value);
                   }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      dropDownValue = value!;
-                    });
-                  },
-                ),
+                )
               ],
             ),
             const SizedBox(
@@ -170,20 +186,23 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   'Expense breakdown',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
-                DropdownButton<String>(
-                  value: dropDownValue,
-                  items: month.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      dropDownValue = value!;
-                    });
-                  },
-                ),
+                // DropdownButton<String>(
+                //   value: dropDownValue,
+                //   items: month.map<DropdownMenuItem<String>>((String value) {
+                //     return DropdownMenuItem<String>(
+                //       value: value,
+                //       child: Text(value),
+                //     );
+                //   }).toList(),
+                //   onChanged: (value) {
+                //     setState(() {
+                //       dropDownValue = value!;
+                //     });
+                //   },
+                // ),
+                DropdownMenu(dropdownMenuEntries: graphDropdownMenu.map((value){
+                  return DropdownMenuEntry(value: value, label: value);
+                }).toList(),)
               ],
             ),
             Text(
@@ -233,44 +252,23 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
             ),
             Expanded(
               child: GridView.builder(
-                  itemCount: expeseDetails.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 11,
-                      crossAxisSpacing: 11,
-                      childAspectRatio: 3 / 1),
-                  itemBuilder: (context, index) {
-                    return StatisticsExpenseDetails(
-                        icon: expeseDetails[index]['icon'], color: expeseDetails[index]['color'], title: expeseDetails[index]['title'], amount: expeseDetails[index]['amount'].toString());
-                  }),
+                itemCount: expeseDetails.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 11,
+                    crossAxisSpacing: 11,
+                    childAspectRatio: 3 / 1),
+                itemBuilder: (context, index) {
+                  return StatisticsExpenseDetails(
+                      icon: expeseDetails[index]['icon'],
+                      color: expeseDetails[index]['color'],
+                      title: expeseDetails[index]['title'],
+                      amount: expeseDetails[index]['amount'].toString());
+                },
+              ),
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
-            label: 'Statistics',
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.add),
-              label: 'Add item',
-              backgroundColor: Colors.red[200]),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            label: 'Notification',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
       ),
     );
   }

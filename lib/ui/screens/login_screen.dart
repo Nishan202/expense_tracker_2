@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
             //   child: TextButton(onPressed: (){}, child: Text('Forgot password')),
             // ),
             const SizedBox(height: 15,),
-            CustomButton(title: 'Sign In', onClick: () => Navigator.pushReplacementNamed(context, AppRoutes.HOME_SCREEN_ROUTE),),
+            CustomButton(title: 'Sign In', onClick: () => Navigator.pushReplacementNamed(context, AppRoutes.BOTTOM_NAVIGATION_BAR),),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

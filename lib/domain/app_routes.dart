@@ -4,10 +4,12 @@ import 'package:expense_tracker_2/ui/screens/notification_screen.dart';
 import 'package:expense_tracker_2/ui/screens/registration_screen.dart';
 import 'package:expense_tracker_2/ui/screens/splash_screen.dart';
 import 'package:expense_tracker_2/ui/screens/statistics_screen.dart';
+import 'package:expense_tracker_2/ui/widgets/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 class AppRoutes {
   static const String SPLASH_SCREEN_ROUTE = '/splash';
+  static const String BOTTOM_NAVIGATION_BAR = '/';
   static const String HOME_SCREEN_ROUTE = '/home';
   static const String LOGIN_SCREEN_ROUTE = '/login';
   static const String REGISTRATION_SCREEN_ROUTE = '/registration';
@@ -16,6 +18,7 @@ class AppRoutes {
 
   static Map<String, WidgetBuilder> pageRoute = {
     SPLASH_SCREEN_ROUTE : (_) => SplashScreen(),
+    BOTTOM_NAVIGATION_BAR : (_) => BottomNavigation(),
     HOME_SCREEN_ROUTE : (_) => HomeScreen(),
     NOTIFICATION_SCREEN_ROUTE : (_) => NotificationScreen(),
     STATISTICS_SCREEN_ROUTE : (_) => StatisticsScreen(),
