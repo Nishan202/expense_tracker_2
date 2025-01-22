@@ -6,12 +6,13 @@ class UserDataModel {
   String email;
   String password;
   int phoneNo;
+  String createdAt;
 
-  UserDataModel({this.id = 0, required this.name, required this.email, required this.password, required this.phoneNo});
+  UserDataModel({this.id = 0, required this.name, required this.email, required this.password, required this.phoneNo, required this.createdAt});
 
   // fromMap
   factory UserDataModel.fromMap(Map<String, dynamic> map){
-    return UserDataModel(id: map[DBHelper.COLUMN_USER_ID], name: map[DBHelper.COLUMN_USER_NAME], email: map[DBHelper.COLUMN_USER_EMAIL], password: map[DBHelper.COLUMN_USER_PASSWORD], phoneNo: map[DBHelper.COLUMN_USER_PHONE_NO]);
+    return UserDataModel(id: map[DBHelper.COLUMN_USER_ID], name: map[DBHelper.COLUMN_USER_NAME], email: map[DBHelper.COLUMN_USER_EMAIL], password: map[DBHelper.COLUMN_USER_PASSWORD], phoneNo: map[DBHelper.COLUMN_USER_PHONE_NO], createdAt: map[DBHelper.COLUMN_USER_CREATED_AT]);
   }
 
   // toMap -> when we need to return data as Map
@@ -20,8 +21,8 @@ class UserDataModel {
       DBHelper.COLUMN_USER_NAME : name,
       DBHelper.COLUMN_USER_EMAIL : email,
       DBHelper.COLUMN_USER_PASSWORD : password,
-      DBHelper.COLUMN_USER_PHONE_NO : phoneNo
+      DBHelper.COLUMN_USER_PHONE_NO : phoneNo,
+      DBHelper.COLUMN_USER_CREATED_AT : createdAt
     };
   }
-
 }

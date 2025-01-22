@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 class CategoryDataModel {
   int id;
   String title;
-  IconData icon;
+  String icon;
 
-  CategoryDataModel({this.id=0, required this.title, required this.icon});
+  CategoryDataModel({required this.id, required this.title, required this.icon});
 
   factory CategoryDataModel.fromMap(Map<String, dynamic> map){
-    return CategoryDataModel(title: map[DBHelper.CATEGORY_TITLE], icon: map[DBHelper.CATEGORY_IMAGE]);
+    return CategoryDataModel(id: map[DBHelper.CATEGORY_ID], title: map[DBHelper.CATEGORY_TITLE], icon: map[DBHelper.CATEGORY_IMAGE]);
   }
 
   Map<String, dynamic> toMap (){

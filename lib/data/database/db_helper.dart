@@ -1,6 +1,7 @@
 import 'package:expense_tracker_2/data/models/user_data_model.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DBHelper {
@@ -14,6 +15,7 @@ class DBHelper {
   static const String COLUMN_USER_EMAIL = 'user_email';
   static const String COLUMN_USER_PASSWORD = 'user_password';
   static const String COLUMN_USER_PHONE_NO = 'user_phoneNo';
+  static const String COLUMN_USER_CREATED_AT = 'user_created_at';
   // static const String COLUMN_USER_CREATED = 'user_created_at';
 
   // Expense table
@@ -24,7 +26,7 @@ class DBHelper {
   static const String COLUMN_EXPENSE_AMOUNT = 'expense_amount';
   static const String COLUMN_EXPENSE_BALANCE = 'expense_balance';
   static const String COLUMN_EXPENSE_DATE = 'expense_date';
-  static const String COLUMN_FK_USER_ID = 'expense_user_id';
+  static const String COLUMN_FK_USER_ID = 'user_id';
   static const String COLUMN_EXPENSE_TYPE = 'expense_type'; // to define it's debit or credit
   static const String COLUMN_EXPENSE_CATEGORY_ID = 'expense_category_id';
 
@@ -63,7 +65,7 @@ class DBHelper {
 
       // user table creation
       db.execute(
-        'CREATE TABLE $USER_TABLE ($COLUMN_USER_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_USER_NAME TEXT NOT NULL, $COLUMN_USER_EMAIL TEXT NOT NULL, $COLUMN_USER_PASSWORD TEXT NOT NULL, $COLUMN_USER_PHONE_NO INTEGER NOT NULL)'
+        'CREATE TABLE $USER_TABLE ($COLUMN_USER_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_USER_NAME TEXT NOT NULL, $COLUMN_USER_EMAIL TEXT NOT NULL, $COLUMN_USER_PASSWORD TEXT NOT NULL, $COLUMN_USER_PHONE_NO INTEGER NOT NULL, $COLUMN_USER_CREATED_AT TEXT)'
       );
 
       // Expense table creation
@@ -72,9 +74,9 @@ class DBHelper {
       );
 
       // Category table creation
-      db.execute(
-        'CREATE TABLE $USER_TABLE ($CATEGORY_ID INTEGER PRIMARY KEY AUTOINCREMENT, $CATEGORY_TITLE TEXT NOT NULL, $CATEGORY_IMAGE BLOB)'
-      );
+      // db.execute(
+      //   'CREATE TABLE $USER_TABLE ($CATEGORY_ID INTEGER PRIMARY KEY AUTOINCREMENT, $CATEGORY_TITLE TEXT NOT NULL, $CATEGORY_IMAGE BLOB)'
+      // );
     });
   }
 
@@ -116,4 +118,36 @@ class DBHelper {
     return mNotes;
   }
   */
+
+  // Queries
+
+  // Check the user already registered or not
+  Future<bool> isAlreadyRegistered({required String email, required int phoneNO}) async {
+    var db = await getDB();
+
+    List<Map<String , dynamic>> userData = await db.query(USER_TABLE, where: "$COLUMN_USER_EMAIL = ? OR $COLUMN_USER_PHONE_NO  = ?" , whereArgs: [email, phoneNO]);
+    return userData.isNotEmpty;
+  }
+
+  // Add user data in database
+  Future<bool> registerUser({required UserDataModel userModel}) async {
+    Database db = await getDB();
+
+    int rowsEffected = await db.insert(USER_TABLE, userModel.toMap());
+    return rowsEffected>0;
+  }
+
+  // Authenticate uer details
+  Future<bool> authenticateUser({required String email, required String password}) async {
+    Database db = await getDB();
+
+    List<Map<String, dynamic>> userData = await db.query(USER_TABLE, where: '$COLUMN_USER_EMAIL = ? AND $COLUMN_USER_PASSWORD = ?', whereArgs: [email, password]);
+
+    // to manage session store UID in shared preference
+    if(userData.isNotEmpty){
+      var preference = await SharedPreferences.getInstance();
+      preference.setInt('UID', userData[0][COLUMN_USER_ID]);
+    }
+    return userData.isNotEmpty;
+  }
 }
