@@ -1,3 +1,4 @@
+import 'package:expense_tracker_2/data/database/db_helper.dart';
 import 'package:expense_tracker_2/domain/app_routes.dart';
 import 'package:expense_tracker_2/domain/asset_management.dart';
 import 'package:expense_tracker_2/ui/widgets/custom_button.dart';
@@ -14,6 +15,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  DBHelper db = DBHelper.getInstense();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,12 +36,20 @@ class _LoginScreenState extends State<LoginScreen> {
             //   child: TextButton(onPressed: (){}, child: Text('Forgot password')),
             // ),
             const SizedBox(height: 15,),
-            CustomButton(title: 'Sign In', onClick: () => Navigator.pushReplacementNamed(context, AppRoutes.BOTTOM_NAVIGATION_BAR),),
+            CustomButton(title: 'Sign In', onClick: () async {
+              bool check = await db.authenticateUser(email: _emailController.text, password: _passwordController.text);
+              if(check){
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Successfully log in!!")));
+                Navigator.pushReplacementNamed(context, AppRoutes.BOTTOM_NAVIGATION_BAR);
+              } else{
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Invalid credentials, Please Log in again")));
+              }
+            }),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text("Don't have an account?", style: TextStyle(fontSize: 16),),
-                TextButton(onPressed: () => Navigator.pushReplacementNamed(context, AppRoutes.REGISTRATION_SCREEN_ROUTE), child: Text('Sign Up', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.indigo),),)
+                TextButton(onPressed: () => Navigator.pushNamed(context, AppRoutes.REGISTRATION_SCREEN_ROUTE), child: Text('Sign Up', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.indigo),),)
               ],
             )
           ],

@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:expense_tracker_2/domain/app_routes.dart';
 import 'package:expense_tracker_2/domain/asset_management.dart';
+import 'package:expense_tracker_2/ui/screens/home_screen.dart';
 import 'package:expense_tracker_2/ui/screens/login_screen.dart';
+import 'package:expense_tracker_2/ui/widgets/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,12 +23,14 @@ class _SplashScreenState extends State<SplashScreen> {
       var preference = await SharedPreferences.getInstance();
       int uid = await preference.getInt('UID') ?? 0;
 
-      // Widget navigateTo = LoginScreen();
+      Widget navigateTo = LoginScreen();
 
       if(uid>0){
-        Navigator.pushReplacementNamed(context, AppRoutes.BOTTOM_NAVIGATION_BAR);
+        // Navigator.pushReplacementNamed(context, AppRoutes.BOTTOM_NAVIGATION_BAR);
+        navigateTo = BottomNavigation();
       }
-      Navigator.pushReplacementNamed(context, AppRoutes.LOGIN_SCREEN_ROUTE);
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => navigateTo));
+      // Navigator.pushReplacementNamed(context, AppRoutes.LOGIN_SCREEN_ROUTE);
     });
   }
 

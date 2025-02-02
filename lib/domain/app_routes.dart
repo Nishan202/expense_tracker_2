@@ -4,7 +4,7 @@ import 'package:expense_tracker_2/ui/screens/notification_screen.dart';
 import 'package:expense_tracker_2/ui/screens/registration_screen.dart';
 import 'package:expense_tracker_2/ui/screens/splash_screen.dart';
 import 'package:expense_tracker_2/ui/screens/statistics_screen.dart';
-import 'package:expense_tracker_2/ui/widgets/bottom_navigation_bar.dart';
+import 'package:expense_tracker_2/ui/widgets/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 
 class AppRoutes {

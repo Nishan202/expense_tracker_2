@@ -69,9 +69,9 @@ class DBHelper {
       );
 
       // Expense table creation
-      db.execute(
-        'CREATE TABLE $EXPENSE_TABLE ($COLUMN_EXPENSE_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_EXPENSE_TITLE TEXT NOT NULL, $COLUMN_EXPENSE_DESCRIPTION TEXT, $COLUMN_EXPENSE_AMOUNT REAL NOT NULL, $COLUMN_EXPENSE_BALANCE REAL, $COLUMN_EXPENSE_DATE TEXT NOT NULL, $COLUMN_FK_USER_ID INTEGER NOT NULL, FOREIGN KEY($COLUMN_FK_USER_ID) REFERENCES $USER_TABLE($COLUMN_USER_ID), $COLUMN_EXPENSE_TYPE TEXT, $COLUMN_EXPENSE_CATEGORY_ID INTEGER NOT NULL)'
-      );
+      // db.execute(
+      //   'CREATE TABLE $EXPENSE_TABLE ($COLUMN_EXPENSE_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_EXPENSE_TITLE TEXT NOT NULL, $COLUMN_EXPENSE_DESCRIPTION TEXT, $COLUMN_EXPENSE_AMOUNT REAL NOT NULL, $COLUMN_EXPENSE_BALANCE REAL, $COLUMN_EXPENSE_DATE TEXT NOT NULL, $COLUMN_FK_USER_ID INTEGER NOT NULL, FOREIGN KEY($COLUMN_FK_USER_ID) REFERENCES $USER_TABLE($COLUMN_USER_ID), $COLUMN_EXPENSE_TYPE TEXT, $COLUMN_EXPENSE_CATEGORY_ID INTEGER NOT NULL)'
+      // );
 
       // Category table creation
       // db.execute(
@@ -123,7 +123,7 @@ class DBHelper {
 
   // Check the user already registered or not
   Future<bool> isAlreadyRegistered({required String email, required int phoneNO}) async {
-    var db = await getDB();
+    Database db = await getDB();
 
     List<Map<String , dynamic>> userData = await db.query(USER_TABLE, where: "$COLUMN_USER_EMAIL = ? OR $COLUMN_USER_PHONE_NO  = ?" , whereArgs: [email, phoneNO]);
     return userData.isNotEmpty;
@@ -149,5 +149,17 @@ class DBHelper {
       preference.setInt('UID', userData[0][COLUMN_USER_ID]);
     }
     return userData.isNotEmpty;
+  }
+
+  Future<List<UserDataModel>> fetchAllData() async {
+    var db = await getDB();
+    List<Map<String, dynamic>> mData = await db.query(USER_TABLE);
+    List<UserDataModel> userCred = [];
+    for(int i=0; i<mData.length; i++){
+      UserDataModel dataModel = UserDataModel.fromMap(mData[i]);
+      userCred.add(dataModel);
+    }
+
+    return userCred;
   }
 }
