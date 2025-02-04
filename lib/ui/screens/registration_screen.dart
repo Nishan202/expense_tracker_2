@@ -50,12 +50,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               if(!await dbHelper.isAlreadyRegistered(email: _emailController.text, phoneNO: int.parse(_phoneNoController.text))){
                 UserDataModel newUser = UserDataModel(name: _nameController.text, email: _emailController.text, password: _passwordController.text, phoneNo: int.parse(_phoneNoController.text), createdAt: DateTime.now().millisecondsSinceEpoch.toString());
                 BlocProvider.of<SignupBloc>(context).add(RegisterUser(user: newUser));
-                // print('User registered successfully');
                 debugPrint('User registered successfully');
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('User successfully registered, Log in now')));
                 Navigator.pop(context);
                 // bool check = await dbHelper.registerUser(userModel: newUser);
                 // if(check){
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('User successfully registered, Log in now')));
+                  // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('User successfully registered, Log in now')));
                 // }
                 // else{
                 //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Something went wrong, please try again!!')));

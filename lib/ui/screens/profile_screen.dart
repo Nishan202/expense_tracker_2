@@ -4,18 +4,23 @@ import 'package:expense_tracker_2/data/state_management/auth/signup_state_bloc.d
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:  AppBar(
         title: Text('Profile'),
+        leading: TextButton(onPressed: (){}, child: const Text('Logout')),
       ),
       body: BlocBuilder<SignupBloc, SignupStateBloc>(builder: (ctx , state){
         List<UserDataModel> allData = state.uModel;
-
         return allData.isNotEmpty ? ListView.builder(itemCount: allData.length, itemBuilder: (_ , index){
           return ListTile(
             title: Text(allData[index].email),
