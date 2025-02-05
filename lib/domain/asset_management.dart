@@ -55,6 +55,7 @@ class Assets {
   static const String investment_imge = 'assets/icons/investment.png';
   static const String mortgage_image = 'assets/icons/mortgage.png';
   static const String toy_image = 'assets/icons/toy.png';
+  static const String logOut = 'assets/icons/exit.png';
 }
 
 class Colour {
