@@ -7,6 +7,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class SignupBloc extends Bloc<SignupEventBloc, SignupStateBloc> {
   DBHelper dbHelper;
   SignupBloc({required this.dbHelper}) : super(SignupStateBloc(uModel: [])) {
+    on<FetchInitialData>((event, emit) async {
+      List<UserDataModel> currentStateValue = state.uModel;
+      currentStateValue = await dbHelper.fetchAllData();
+      emit(SignupStateBloc(uModel: currentStateValue));
+    });
+
     on<RegisterUser>((event, emit) async {
       bool check = await dbHelper.registerUser(userModel: event.user);
 

@@ -1,5 +1,6 @@
 import 'package:expense_tracker_2/data/models/user_data_model.dart';
 import 'package:expense_tracker_2/data/state_management/auth/signup_bloc.dart';
+import 'package:expense_tracker_2/data/state_management/auth/signup_event_bloc.dart';
 import 'package:expense_tracker_2/data/state_management/auth/signup_state_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +13,15 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<SignupBloc>().add(FetchInitialData());
+  }
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
