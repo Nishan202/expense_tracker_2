@@ -26,11 +26,9 @@ class _SplashScreenState extends State<SplashScreen> {
       Widget navigateTo = LoginScreen();
 
       if(uid>0){
-        // Navigator.pushReplacementNamed(context, AppRoutes.BOTTOM_NAVIGATION_BAR);
         navigateTo = BottomNavigation();
       }
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => navigateTo));
-      // Navigator.pushReplacementNamed(context, AppRoutes.LOGIN_SCREEN_ROUTE);
     });
   }
 

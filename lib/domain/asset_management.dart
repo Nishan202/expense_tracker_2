@@ -70,7 +70,7 @@ class Colour {
 }
 
 class CategoryIcons {
-  List<CategoryDataModel> mCategory = [
+  static List<CategoryDataModel> mCategory = [
     CategoryDataModel(cId: 1, title: 'Parking', icon: Assets.parking_image),
     CategoryDataModel(cId: 2, title: 'Cloth', icon: Assets.cloth_image),
     CategoryDataModel(cId: 3, title: 'Gas', icon: Assets.gas_image),

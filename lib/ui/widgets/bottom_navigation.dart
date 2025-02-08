@@ -39,7 +39,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
           ),
           NavigationDestination(
             icon: Icon(Icons.add),
-            label: 'Add item',
+            label: 'Add Expense',
           ),
           NavigationDestination(
             selectedIcon: Icon(Icons.notifications, color: Colors.black,),

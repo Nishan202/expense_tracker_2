@@ -160,7 +160,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 //   },
                 // ),
                 DropdownMenu(
-                  // inputDecorationTheme: InputDecorationTheme(fillColor: Colors.indigo[100], focusColor: Colors.green, outlineBorder: BorderSide(width: 2, style: BorderStyle.solid)),
+                  menuStyle: MenuStyle(
+                      // fixedSize: WidgetStatePropertyAll(Size.fromHeight(30)),
+                        backgroundColor: WidgetStatePropertyAll(
+                            Color.fromARGB(255, 185, 193, 235))),
+                    inputDecorationTheme: InputDecorationTheme(
+                        fillColor: Color.fromARGB(255, 144, 159, 242),
+                        filled: true,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                  initialSelection: monthDropdownMenu[0],
                   dropdownMenuEntries: monthDropdownMenu.map((value) {
                     return DropdownMenuEntry(value: value, label: value);
                   }).toList(),

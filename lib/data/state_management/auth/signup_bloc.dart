@@ -12,7 +12,6 @@ class SignupBloc extends Bloc<SignupEventBloc, SignupStateBloc> {
       currentStateValue = await dbHelper.fetchAllData();
       emit(SignupStateBloc(uModel: currentStateValue));
     });
-
     on<RegisterUser>((event, emit) async {
       bool check = await dbHelper.registerUser(userModel: event.user);
 

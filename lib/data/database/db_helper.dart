@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:expense_tracker_2/data/models/user_data_model.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -147,19 +149,21 @@ class DBHelper {
     if(userData.isNotEmpty){
       var preference = await SharedPreferences.getInstance();
       preference.setInt('UID', userData[0][COLUMN_USER_ID]);
+      // preference.setInt('username', userData[0][U]);
     }
     return userData.isNotEmpty;
   }
 
   Future<List<UserDataModel>> fetchAllData() async {
     var db = await getDB();
-    List<Map<String, dynamic>> mData = await db.query(USER_TABLE);
-    List<UserDataModel> userCred = [];
+    var sprefer = await SharedPreferences.getInstance();
+    int uID = sprefer.getInt('UID') ?? 0;
+    List<Map<String, dynamic>> mData = await db.query(USER_TABLE, where: "$COLUMN_USER_ID = ?", whereArgs: [uID]);
+    List<UserDataModel> userInfo = [];
     for(int i=0; i<mData.length; i++){
       UserDataModel dataModel = UserDataModel.fromMap(mData[i]);
-      userCred.add(dataModel);
+      userInfo.add(dataModel);
     }
-
-    return userCred;
+    return userInfo;
   }
 }

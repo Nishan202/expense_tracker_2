@@ -8,3 +8,9 @@ class RegisterUser extends SignupEventBloc{
   UserDataModel user;
   RegisterUser({required this.user});
 }
+
+class FetchUserDataByID extends SignupEventBloc{
+  int UID;
+  UserDataModel user;
+  FetchUserDataByID({required this.UID, required this.user});
+}

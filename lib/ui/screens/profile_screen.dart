@@ -23,11 +23,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     context.read<SignupBloc>().add(FetchInitialData());
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:  AppBar(
+        automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -45,9 +45,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: BlocBuilder<SignupBloc, SignupStateBloc>(builder: (ctx , state){
         List<UserDataModel> allData = state.uModel;
         return allData.isNotEmpty ? ListView.builder(itemCount: allData.length, itemBuilder: (_ , index){
-          return ListTile(
-            title: Text(allData[index].email),
-            subtitle: Text(allData[index].password),
+          return Column(
+            children: [
+              CircleAvatar(
+                maxRadius: 50,
+                child: FlutterLogo(size: 50, style: FlutterLogoStyle.stacked,),
+              ),
+              SizedBox(height: 30,),
+              Text('Personal information', textAlign: TextAlign.start, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),),
+              ListTile(
+                leading: CircleAvatar(child: Icon(Icons.person)),
+                title: Text("Name"),
+                subtitle: Text(allData[index].name, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),),
+                trailing: IconButton(onPressed: (){}, icon: Icon(Icons.edit)),
+              ),
+              ListTile(
+                leading: CircleAvatar(child: Icon(Icons.email),),
+                title: Text("Email"),
+                subtitle: Text(allData[index].email, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),),
+              ),
+              ListTile(
+                leading: CircleAvatar(child: Icon(Icons.phone),),
+                title: Text("Phone No"),
+                subtitle: Text(allData[index].phoneNo.toString(), style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),),
+                trailing: IconButton(onPressed: (){}, icon: Icon(Icons.edit)),
+              )
+            ],
           );
         }) : Center(child: Text('No user found'),);
       }),
