@@ -1,15 +1,17 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class ExpenseDetails extends StatelessWidget {
-  final IconData icon;
-  final Color? color;
+  final Image imageIcon;
+  // final Color? color;
   final String title;
   final String description;
   final String amount;
   const ExpenseDetails(
       {super.key,
-      required this.icon,
-      this.color,
+      required this.imageIcon,
+      // this.color,
       required this.title,
       required this.description,
       required this.amount});
@@ -21,13 +23,15 @@ class ExpenseDetails extends StatelessWidget {
       child: Row(
         children: [
           Container(
+            padding: const EdgeInsets.all(5),
             height: 40,
             width: 40,
             decoration: BoxDecoration(
-              color: color ?? Colors.white30,
+              // color: color ?? Colors.white30,
+              color: Colors.primaries[Random().nextInt(Colors.primaries.length-1)].shade100,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon),
+            child: imageIcon,
           ),
           SizedBox(width: 12),
           Expanded(
@@ -52,7 +56,7 @@ class ExpenseDetails extends StatelessWidget {
             ),
           ),
           Text(
-            amount,
+            '\$$amount',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,

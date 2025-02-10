@@ -1,5 +1,5 @@
 import 'package:expense_tracker_2/data/database/db_helper.dart';
-import 'package:expense_tracker_2/data/models/user_data_model.dart';
+import 'package:expense_tracker_2/data/remote/models/user_data_model.dart';
 import 'package:expense_tracker_2/data/state_management/auth/signup_bloc.dart';
 import 'package:expense_tracker_2/data/state_management/auth/signup_event_bloc.dart';
 import 'package:expense_tracker_2/domain/app_routes.dart';
@@ -49,8 +49,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             CustomButton(title: 'Sign Up', onClick: () async {
               if(!await dbHelper.isAlreadyRegistered(email: _emailController.text, phoneNO: int.parse(_phoneNoController.text))){
                 UserDataModel newUser = UserDataModel(name: _nameController.text, email: _emailController.text, password: _passwordController.text, phoneNo: int.parse(_phoneNoController.text), createdAt: DateTime.now().millisecondsSinceEpoch.toString());
-                BlocProvider.of<SignupBloc>(context).add(RegisterUser(user: newUser));
-                debugPrint('User registered successfully');
+                BlocProvider.of<SignupBloc>(context).add(RegisterUser(user: newUser)); 
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('User successfully registered, Log in now')));
                 Navigator.pop(context);
                 // bool check = await dbHelper.registerUser(userModel: newUser);

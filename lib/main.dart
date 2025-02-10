@@ -1,11 +1,19 @@
 import 'package:expense_tracker_2/data/database/db_helper.dart';
 import 'package:expense_tracker_2/data/state_management/auth/signup_bloc.dart';
+import 'package:expense_tracker_2/data/state_management/expense/expense_bloc.dart';
 import 'package:expense_tracker_2/domain/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-  runApp(BlocProvider(create: (context) => SignupBloc(dbHelper: DBHelper.getInstense()), child: const MyApp(),));
+  // This is single bloc provider
+  // runApp(BlocProvider(create: (context) => SignupBloc(dbHelper: DBHelper.getInstense()), child: const MyApp(),));
+
+  // This is Multi Bloc provider
+  runApp(MultiBlocProvider(providers: [
+    BlocProvider(create: (context) => SignupBloc(dbHelper: DBHelper.getInstense())),
+    BlocProvider(create: (context) => ExpenseBloc(dbHelper: DBHelper.getInstense())),
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

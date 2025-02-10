@@ -1,6 +1,7 @@
 import 'dart:collection';
 
-import 'package:expense_tracker_2/data/models/user_data_model.dart';
+import 'package:expense_tracker_2/data/remote/models/expense_data_model.dart';
+import 'package:expense_tracker_2/data/remote/models/user_data_model.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -71,9 +72,9 @@ class DBHelper {
       );
 
       // Expense table creation
-      // db.execute(
-      //   'CREATE TABLE $EXPENSE_TABLE ($COLUMN_EXPENSE_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_EXPENSE_TITLE TEXT NOT NULL, $COLUMN_EXPENSE_DESCRIPTION TEXT, $COLUMN_EXPENSE_AMOUNT REAL NOT NULL, $COLUMN_EXPENSE_BALANCE REAL, $COLUMN_EXPENSE_DATE TEXT NOT NULL, $COLUMN_FK_USER_ID INTEGER NOT NULL, FOREIGN KEY($COLUMN_FK_USER_ID) REFERENCES $USER_TABLE($COLUMN_USER_ID), $COLUMN_EXPENSE_TYPE TEXT, $COLUMN_EXPENSE_CATEGORY_ID INTEGER NOT NULL)'
-      // );
+      db.execute(
+        'CREATE TABLE $EXPENSE_TABLE ($COLUMN_EXPENSE_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_EXPENSE_TITLE TEXT NOT NULL, $COLUMN_EXPENSE_DESCRIPTION TEXT, $COLUMN_EXPENSE_AMOUNT REAL NOT NULL, $COLUMN_EXPENSE_BALANCE REAL, $COLUMN_EXPENSE_DATE TEXT NOT NULL, $COLUMN_FK_USER_ID INTEGER NOT NULL, $COLUMN_EXPENSE_TYPE TEXT, $COLUMN_EXPENSE_CATEGORY_ID INTEGER NOT NULL)'
+      );
 
       // Category table creation
       // db.execute(
@@ -82,46 +83,7 @@ class DBHelper {
     });
   }
 
-/*
-// Add data in Database
-  Future<bool> addNote ({required DataModel newNote}) async {
-    var db = await getDB();
-
-    int rowsEffected = await db.insert(NOTE_TABLE, newNote.toMap());
-    return rowsEffected > 0;
-  }
-
-// Update data in Database
-  Future<bool> updateNote ({required DataModel updateNote}) async {
-    var db = await getDB();
-
-    int rowsEffected = await db.update(NOTE_TABLE, updateNote.toMap(), where: "$COLUMN_NOTE_ID = ${updateNote.id}");
-    return rowsEffected > 0;
-  }
-
-  // Delete data from Database
-  Future<bool> deleteNote ({required int id}) async {
-    var db = await getDB();
-
-    int rowsEffected = await db.delete(NOTE_TABLE , where: "$COLUMN_NOTE_ID = $id");
-    return rowsEffected > 0;
-  }
-
-// Fetch data from Database
-  Future<List<DataModel>> fetchAllData() async {
-    var db = await getDB();
-    List<Map<String, dynamic>> mData = await db.query(NOTE_TABLE);
-    List<DataModel> mNotes = [];
-    for(int i=0; i<mData.length; i++){
-      DataModel dataModel = DataModel.fromMap(mData[i]);
-      mNotes.add(dataModel);
-    }
-
-    return mNotes;
-  }
-  */
-
-  // Queries
+  // Queries for Auth Model
 
   // Check the user already registered or not
   Future<bool> isAlreadyRegistered({required String email, required int phoneNO}) async {
@@ -165,5 +127,31 @@ class DBHelper {
       userInfo.add(dataModel);
     }
     return userInfo;
+  }
+
+
+  // Queries for Expenses
+
+  // Add expenses
+  Future<bool> addExpense ({required ExpenseDataModel newExpense}) async {
+    var db = await getDB();
+
+    int rowsEffected = await db.insert(EXPENSE_TABLE, newExpense.toMap());
+    return rowsEffected > 0;
+  }
+
+  // Fetch data from database
+  Future<List<ExpenseDataModel>> fetchAllExpenses() async {
+    var db = await getDB();
+    // var sprefer = await SharedPreferences.getInstance();
+    // int uID = sprefer.getInt('UID') ?? 0;
+    // List<Map<String, dynamic>> mData = await db.query(EXPENSE_TABLE, where: "$COLUMN_FK_USER_ID = ?", whereArgs: [uID]);
+    List<Map<String, dynamic>> mData = await db.query(EXPENSE_TABLE);
+    List<ExpenseDataModel> expenses = [];
+    for(int i=0; i<mData.length; i++){
+      ExpenseDataModel dataModel = ExpenseDataModel.fromMap(mData[i]);
+      expenses.add(dataModel);
+    }
+    return expenses;
   }
 }

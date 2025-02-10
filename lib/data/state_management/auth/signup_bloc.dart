@@ -1,5 +1,5 @@
 import 'package:expense_tracker_2/data/database/db_helper.dart';
-import 'package:expense_tracker_2/data/models/user_data_model.dart';
+import 'package:expense_tracker_2/data/remote/models/user_data_model.dart';
 import 'package:expense_tracker_2/data/state_management/auth/signup_event_bloc.dart';
 import 'package:expense_tracker_2/data/state_management/auth/signup_state_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

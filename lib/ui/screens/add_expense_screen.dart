@@ -1,6 +1,14 @@
-import 'package:expense_tracker_2/data/models/category_data_model.dart';
+import 'package:expense_tracker_2/data/remote/models/category_data_model.dart';
+import 'package:expense_tracker_2/data/remote/models/expense_data_model.dart';
+import 'package:expense_tracker_2/data/state_management/expense/expense_bloc.dart';
+import 'package:expense_tracker_2/data/state_management/expense/expense_event_bloc.dart';
 import 'package:expense_tracker_2/domain/asset_management.dart';
+import 'package:expense_tracker_2/ui/widgets/custom_button.dart';
+import 'package:expense_tracker_2/ui/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddExpenseScreen extends StatefulWidget {
   const AddExpenseScreen({super.key});
@@ -10,13 +18,17 @@ class AddExpenseScreen extends StatefulWidget {
 }
 
 class _AddExpenseScreenState extends State<AddExpenseScreen> {
+  // List<String> categoryList = CategoryIcons.mCategory.map((category) => category.title).toList();
 
-  List<String> categoryList = CategoryIcons.mCategory.map((category) => category.title).toList();
-
-  List<String> expenseType = ['Select type','Debit', 'Credit'];
+  List<String> expenseType = ['Select type', 'Debit', 'Credit'];
   final _titleController = TextEditingController();
+  final _descriptionController = TextEditingController();
   final _amountController = TextEditingController();
+  int cateSelectedId = -1;
   DateTime? _selectedDate;
+  String selectedExpenseType = 'Selected type';
+  String selectedCategoryType = 'Selected type';
+  DateFormat dateFormatter = DateFormat.yMMMd();
 
   void _presentDatePicker() async {
     final now = DateTime.now();
@@ -43,13 +55,12 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
         child: Column(
           children: [
-            TextField(
-              controller: _titleController,
-              maxLength: 50,
-              decoration: const InputDecoration(
-                label: Text('Title'),
-              ),
+            CustomTextfield(labelText: 'Title', controller: _titleController),
+            SizedBox(
+              height: 10,
             ),
+            CustomTextfield(
+                labelText: 'Description', controller: _descriptionController),
             Row(
               children: [
                 Expanded(
@@ -68,12 +79,11 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Text(
-                      //   _selectedDate == null
-                      //       ? 'No date selected'
-                      //       // : formatter.format(_selectedDate!),
-                      //       : DateFormat.yM().format(_selectedDate!)
-                      // ),
+                      Text(
+                        _selectedDate == null
+                            ? 'No date selected'
+                            : dateFormatter.format(_selectedDate!),
+                      ),
                       IconButton(
                         onPressed: _presentDatePicker,
                         icon: const Icon(
@@ -90,42 +100,47 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // Expanded(
-                  DropdownMenu(
-                    // width: double.infinity,
-                    menuStyle: MenuStyle(
+                DropdownMenu(
+                  // initialSelection: selectedCategoryType;
+                  onSelected: (CategoryDataModel? value) {
+                    cateSelectedId = value!.cId;
+                  },
+                  // width: double.infinity,
+                  menuStyle: const MenuStyle(
                       // fixedSize: WidgetStatePropertyAll(10),
-                        backgroundColor: WidgetStatePropertyAll(
-                            Color.fromARGB(255, 185, 193, 235))),
-                    // initialSelection: categoryList[0],
-                    inputDecorationTheme: InputDecorationTheme(
-                        fillColor: Color.fromARGB(255, 144, 159, 242),
-                        filled: true,
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                    dropdownMenuEntries: categoryList.map((value) {
-                      return DropdownMenuEntry(value: value, label: value);
-                    }).toList(),
-                  ),
+                      backgroundColor: WidgetStatePropertyAll(
+                          Color.fromARGB(255, 185, 193, 235))),
+                  // initialSelection: categoryList[0],
+                  inputDecorationTheme: InputDecorationTheme(
+                      fillColor: const Color.fromARGB(255, 144, 159, 242),
+                      filled: true,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                  dropdownMenuEntries: CategoryIcons.mCategory.map((CategoryDataModel value) {
+                    return DropdownMenuEntry(value: value, label: value.title);
+                  }).toList(),
+                ),
                 // ),
                 // const Spacer(),
                 // const SizedBox(width: 10,),
                 // Expanded(
                 DropdownMenu(
-                    // width: double.infinity,
-                    menuStyle: MenuStyle(
+                  // width: double.infinity,
+                  menuStyle: const MenuStyle(
                       // fixedSize: WidgetStatePropertyAll(Size.fromHeight(30)),
-                        backgroundColor: WidgetStatePropertyAll(
-                            Color.fromARGB(255, 185, 193, 235))),
-                    inputDecorationTheme: InputDecorationTheme(
-                        fillColor: Color.fromARGB(255, 144, 159, 242),
-                        filled: true,
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                    initialSelection: expenseType[0],
-                    dropdownMenuEntries: expenseType.map((value) {
-                      return DropdownMenuEntry(value: value, label: value);
-                    }).toList(),
-                  ),
+                      backgroundColor: WidgetStatePropertyAll(
+                          Color.fromARGB(255, 185, 193, 235))),
+                  inputDecorationTheme: InputDecorationTheme(
+                      fillColor: const Color.fromARGB(255, 144, 159, 242),
+                      filled: true,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                  initialSelection: selectedExpenseType,
+                  onSelected: (value) => selectedExpenseType = value!,
+                  dropdownMenuEntries: expenseType.map((value) {
+                    return DropdownMenuEntry(value: value, label: value);
+                  }).toList(),
+                ),
                 // ),
               ],
             ),
@@ -133,13 +148,27 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               height: 15,
             ),
             SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.deepPurpleAccent[50])),
-                onPressed: () {},
-                child: const Text('Save Expense'),
-              ),
-            ),
+                width: double.infinity,
+                child: CustomButton(
+                    title: 'Add Expense',
+                    onClick: () async {
+                      var prefs = await SharedPreferences.getInstance();
+                      int uid = prefs.getInt('UID') ?? 0;
+                      context.read<ExpenseBloc>().add(AddExpenseData(
+                              expenses: ExpenseDataModel(
+                            title: _titleController.text,
+                            description: _descriptionController.text,
+                            amount: double.parse(_amountController.text),
+                            // amount: _amountController.text.toString(),
+                            balance: 0,
+                            date: (_selectedDate ?? DateTime.now()).millisecondsSinceEpoch.toString(),
+                            expenseType: selectedExpenseType,
+                            uId: uid,
+                            categoryId: cateSelectedId
+                          )));
+                          Navigator.pop(context);
+                      // BlocProvider.of<ExpenseBloc>(context).add(AddExpenseData(expenses: expenses))
+                    })),
           ],
         ),
       ),
