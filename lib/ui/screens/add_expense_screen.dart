@@ -167,6 +167,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                             categoryId: cateSelectedId
                           )));
                           // Navigator.pop(context);
+                          FocusScope.of(context).unfocus();
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Expense is added, now go to home screen')));
                       // BlocProvider.of<ExpenseBloc>(context).add(AddExpenseData(expenses: expenses))
                     })),
