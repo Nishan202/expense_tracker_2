@@ -26,8 +26,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   final _amountController = TextEditingController();
   int cateSelectedId = -1;
   DateTime? _selectedDate;
-  String selectedExpenseType = 'Selected type';
-  String selectedCategoryType = 'Selected type';
+  String selectedExpenseType = 'Select type';
+  String selectedCategoryType = 'Parking';
   DateFormat dateFormatter = DateFormat.yMMMd();
 
   void _presentDatePicker() async {
@@ -101,16 +101,17 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               children: [
                 // Expanded(
                 DropdownMenu(
-                  // initialSelection: selectedCategoryType;
+                  menuHeight: 250,
                   onSelected: (CategoryDataModel? value) {
                     cateSelectedId = value!.cId;
+                    // selectedCategoryType = value.title;
                   },
                   // width: double.infinity,
                   menuStyle: const MenuStyle(
                       // fixedSize: WidgetStatePropertyAll(10),
                       backgroundColor: WidgetStatePropertyAll(
                           Color.fromARGB(255, 185, 193, 235))),
-                  // initialSelection: categoryList[0],
+                  // initialSelection: ,
                   inputDecorationTheme: InputDecorationTheme(
                       fillColor: const Color.fromARGB(255, 144, 159, 242),
                       filled: true,
@@ -127,7 +128,6 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                 DropdownMenu(
                   // width: double.infinity,
                   menuStyle: const MenuStyle(
-                      // fixedSize: WidgetStatePropertyAll(Size.fromHeight(30)),
                       backgroundColor: WidgetStatePropertyAll(
                           Color.fromARGB(255, 185, 193, 235))),
                   inputDecorationTheme: InputDecorationTheme(
@@ -135,7 +135,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                       filled: true,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10))),
-                  initialSelection: selectedExpenseType,
+                  initialSelection: expenseType[0],
                   onSelected: (value) => selectedExpenseType = value!,
                   dropdownMenuEntries: expenseType.map((value) {
                     return DropdownMenuEntry(value: value, label: value);
@@ -166,7 +166,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                             uId: uid,
                             categoryId: cateSelectedId
                           )));
-                          Navigator.pop(context);
+                          // Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Expense is added, now go to home screen')));
                       // BlocProvider.of<ExpenseBloc>(context).add(AddExpenseData(expenses: expenses))
                     })),
           ],

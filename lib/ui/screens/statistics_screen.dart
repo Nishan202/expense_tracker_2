@@ -1,5 +1,12 @@
+import 'package:d_chart/commons/data_model/data_model.dart';
+import 'package:d_chart/ordinal/bar.dart';
+import 'package:expense_tracker_2/data/remote/models/expense_filter_model.dart';
+import 'package:expense_tracker_2/data/state_management/expense/expense_bloc.dart';
+import 'package:expense_tracker_2/data/state_management/expense/expense_event_bloc.dart';
+import 'package:expense_tracker_2/data/state_management/expense/expense_state_bloc.dart';
 import 'package:expense_tracker_2/ui/widgets/statistics_expense_details.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({super.key});
@@ -61,6 +68,12 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       "amount": -10,
     }
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<ExpenseBloc>().add(FetchFilteredExpenses(filterType: 0));
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,6 +106,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   //   },
                   // ),
                   DropdownMenu(
+                    initialSelection: monthDropdownMenu[0],
                     dropdownMenuEntries: monthDropdownMenu.map((value) {
                       return DropdownMenuEntry(value: value, label: value);
                     }).toList(),
@@ -201,7 +215,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   //     });
                   //   },
                   // ),
-                  DropdownMenu(dropdownMenuEntries: graphDropdownMenu.map((value){
+                  DropdownMenu(initialSelection: graphDropdownMenu[0], dropdownMenuEntries: graphDropdownMenu.map((value){
                     return DropdownMenuEntry(value: value, label: value);
                   }).toList(),)
                 ],
@@ -213,6 +227,20 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               SizedBox(
                 height: 250,
               ),
+              // Bar chart
+              // BlocBuilder<ExpenseBloc, ExpenseStateBloc>(builder: (ctx, state){
+              //   if(state is ExpenseFilterLoadedState){
+              //     List<OrdinalGroup> mList = [];
+              //     OrdinalGroup singleData;
+              //     for(ExpenseFilterModel eachFilterModel in state.mFilteredExpense){
+              //       // mList.add(OrdinalGroup(id: eachFilterModel.expenseType, data: eachFilterModel.balance));
+              //       singleData
+              //     }
+              //     mList.add(singleData);
+              //     return AspectRatio(aspectRatio: 16/9 , child: DChartBarO(groupList: ),);
+              //   }
+              //   return Container();
+              // }),
               Text(
                 'Spending Details',
                 style: TextStyle(

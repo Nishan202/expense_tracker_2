@@ -1,27 +1,94 @@
 import 'package:expense_tracker_2/data/database/db_helper.dart';
 import 'package:expense_tracker_2/data/remote/models/expense_data_model.dart';
+import 'package:expense_tracker_2/data/remote/models/expense_filter_model.dart';
 import 'package:expense_tracker_2/data/state_management/expense/expense_event_bloc.dart';
 import 'package:expense_tracker_2/data/state_management/expense/expense_state_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
-class ExpenseBloc extends Bloc<ExpenseEventBloc, ExpenseStateBloc>{
+class ExpenseBloc extends Bloc<ExpenseEventBloc, ExpenseStateBloc> {
   DBHelper dbHelper;
-  ExpenseBloc({required this.dbHelper}) : super(ExpenseInitialState()){
+  DateFormat df = DateFormat.yMMMd();
+  // DateFormat mf = DateFormat.yMMM();
+  ExpenseBloc({required this.dbHelper}) : super(ExpenseInitialState()) {
     on<FetchInitialExpenses>((event, emit) async {
       emit(ExpenseLoadingState());
       List<ExpenseDataModel> allExpenses = await dbHelper.fetchAllExpenses();
       emit(ExpenseLoadedState(expModel: allExpenses));
     });
 
+    on<FetchFilteredExpenses>((event, emit) async {
+      emit(ExpenseLoadingState());
+      List<ExpenseDataModel> allExpenses = await dbHelper.fetchAllExpenses();
+
+      if(event.filterType == 0){
+        df = DateFormat.yMMMd();
+      } else if (event.filterType == 1) {
+        df = DateFormat.yMMM();
+      } else if (event.filterType == 2) {
+        df = DateFormat.y();
+      }
+      emit(ExpenseFilterLoadedState(mFilteredExpense: filterExpense(allExpenses)));
+    });
+
     on<AddExpenseData>((event, emit) async {
       emit(ExpenseLoadingState());
       bool check = await dbHelper.addExpense(newExpense: event.expenses);
-      if(check){
+      if (check) {
         List<ExpenseDataModel> allExpenses = await dbHelper.fetchAllExpenses();
         emit(ExpenseLoadedState(expModel: allExpenses));
-      } else{
+        emit(ExpenseFilterLoadedState(mFilteredExpense: filterExpense(allExpenses)));
+      } else {
         emit(ExpenseErrorState(errorMessage: "Expense not added"));
       }
     });
   }
+
+  // Filter data date wise
+    List<ExpenseFilterModel> filterExpense(List<ExpenseDataModel> expenses) {
+      List<ExpenseFilterModel> filteredExpenses = [];
+      // when this function will call then first clear previous data from the list
+      // filteredExpenses.clear();
+
+      // filter unique datte
+      List<String> uniqueDates = [];
+      for (ExpenseDataModel eachExp in expenses) {
+        String eachDate = df.format(DateTime.fromMillisecondsSinceEpoch(int.parse(eachExp.date)));
+        if (!uniqueDates.contains(eachDate)) {
+          uniqueDates.add(eachDate);
+        }
+      }
+
+      print(uniqueDates);
+
+      // check each date expenses
+      for (String eachDate in uniqueDates) {
+        num balance = 0.0;
+        List<ExpenseDataModel> eachDateExp = []; // will add each date expense in this list
+        for (ExpenseDataModel eachExp in expenses) {
+          String eachExpDate = df.format(
+              DateTime.fromMillisecondsSinceEpoch(int.parse(eachExp.date)));
+          if (eachExpDate == eachDate) {
+            eachDateExp.add(eachExp);
+
+            if (eachExp.expenseType == 'Debit') {
+              balance = balance - eachExp.amount;
+            } else {
+              balance = balance + eachExp.amount;
+            }
+          }
+        }
+
+        print('each date : $eachDate');
+        print('balance : $balance');
+        print('items : ${eachDateExp.length}');
+
+        filteredExpenses.add(ExpenseFilterModel(
+          expenseType: eachDate,
+          balance: balance,
+          allExpense: eachDateExp,
+        ));
+      }
+      return filteredExpenses;
+    }
 }

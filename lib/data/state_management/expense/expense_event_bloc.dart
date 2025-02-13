@@ -4,6 +4,11 @@ sealed class ExpenseEventBloc {}
 
 class FetchInitialExpenses extends ExpenseEventBloc{}
 
+class FetchFilteredExpenses extends ExpenseEventBloc{
+  int filterType;
+  FetchFilteredExpenses({required this.filterType});
+}
+
 class AddExpenseData extends ExpenseEventBloc{
   ExpenseDataModel expenses;
   AddExpenseData({required this.expenses});

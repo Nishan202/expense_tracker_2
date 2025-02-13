@@ -1,15 +1,11 @@
-import 'dart:math';
-
 import 'package:expense_tracker_2/data/remote/models/expense_data_model.dart';
+import 'package:expense_tracker_2/data/remote/models/expense_filter_model.dart';
 import 'package:expense_tracker_2/data/remote/models/user_data_model.dart';
 import 'package:expense_tracker_2/data/state_management/auth/signup_bloc.dart';
 import 'package:expense_tracker_2/data/state_management/auth/signup_state_bloc.dart';
 import 'package:expense_tracker_2/data/state_management/expense/expense_bloc.dart';
 import 'package:expense_tracker_2/data/state_management/expense/expense_event_bloc.dart';
 import 'package:expense_tracker_2/data/state_management/expense/expense_state_bloc.dart';
-import 'package:expense_tracker_2/domain/app_routes.dart';
-import 'package:expense_tracker_2/ui/screens/notification_screen.dart';
-import 'package:expense_tracker_2/ui/screens/statistics_screen.dart';
 import 'package:expense_tracker_2/ui/widgets/expense_details.dart';
 import 'package:expense_tracker_2/ui/widgets/expense_item.dart';
 import 'package:flutter/material.dart';
@@ -25,68 +21,59 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<String> monthDropdownMenu = <String>['This Month', 'February', 'March', 'April'];
+  // List<String> monthDropdownMenu = <String>['Date wise', 'Month wise', 'Year wise']; // for expense type
+  String selectedFilter = "Date wise";
+  List<ExpenseFilterModel> filteredExpenses = [];
   DateFormat df = DateFormat.yMMMd();
-  // List<Map<String, dynamic>> expenseList = [
-  //   {
-  //     "date": "Tuesday, 14",
-  //     "totalAmount": -1380,
-  //     "items": [
-  //       {
-  //         'icon': Icons.shopping_cart,
-  //         // "color" : Colors.amber,
-  //         "title": "Shop",
-  //         "description": "Buy new clothes",
-  //         "amount": -90,
-  //       },
-  //       {
-  //         'icon': Icons.phone_iphone,
-  //         "color": Colors.green[200],
-  //         "title": "Electronic",
-  //         "description": "Buy new iPhone 14",
-  //         "amount": -190,
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     "date": "Monday, 13",
-  //     "totalAmount": -1260,
-  //     "items": [
-  //       {
-  //         'icon': Icons.card_travel,
-  //         "color": Colors.purple[100],
-  //         "title": "Transportation",
-  //         "description": "Trip to Malang",
-  //         "amount": -60,
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     "date": "Tuesday, 14",
-  //     "totalAmount": -1380,
-  //     "items": [
-  //       {
-  //         'icon': Icons.shopping_cart,
-  //         "color": Colors.blue[200],
-  //         "title": "Shop",
-  //         "description": "Buy new clothes",
-  //         "amount": -90,
-  //       },
-  //       {
-  //         'icon': Icons.phone_iphone,
-  //         "color": Colors.red[100],
-  //         "title": "Electronic",
-  //         "description": "Buy new iPhone 14",
-  //         "amount": -190,
-  //       },
-  //     ],
-  //   },
-  // ];
+
+/*
+// Filter data date wise
+  void filterExpenseDatewise({required List<ExpenseDataModel> expenses}){
+  // when this function will call then first clear previous data from the list
+  filteredExpenses.clear();
+
+  // filter unique date
+  List<String> uniqueDates = [];
+  for(ExpenseDataModel eachExp in expenses){
+    String eachDate = df.format(DateTime.fromMillisecondsSinceEpoch(int.parse(eachExp.date)));
+    if(!uniqueDates.contains(eachDate)){
+      uniqueDates.add(eachDate);
+    }
+  }
+
+  print(uniqueDates);
+
+  // check each date expenses
+  for(String eachDate in uniqueDates){
+    num balance = 0.0;
+    List<ExpenseDataModel> eachDateExp = []; // will add each date expense in this list
+    for(ExpenseDataModel eachExp in expenses){
+      String eachExpDate = df.format(DateTime.fromMillisecondsSinceEpoch(int.parse(eachExp.date)));
+      if(eachExpDate == eachDate){
+        eachDateExp.add(eachExp);
+
+        if(eachExp.expenseType == 'Debit'){
+          balance = balance - eachExp.amount;
+        } else{
+          balance = balance + eachExp.amount;
+        }
+      }
+    }
+    
+    print('each date : $eachDate');
+    print('balance : $balance');
+    print('items : ${eachDateExp.length}');
+
+    filteredExpenses.add(ExpenseFilterModel(expenseType: eachDate, balance: balance, allExpense: eachDateExp,));
+  }
+}
+
+*/
 
   @override
   void initState() {
     super.initState();
-    context.read<ExpenseBloc>().add(FetchInitialExpenses());
+    context.read<ExpenseBloc>().add(FetchFilteredExpenses(filterType: 0));
   }
 
 
@@ -115,13 +102,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.search,
-                color: Colors.black,
-              ),
-            ),
+            // IconButton(
+            //   onPressed: () {},
+            //   icon: Icon(
+            //     Icons.search,
+            //     color: Colors.black,
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -169,35 +156,44 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
-                // DropdownButton<String>(
-                //   value: dropDownValue,
-                //   items: month.map<DropdownMenuItem<String>>((String value) {
-                //     return DropdownMenuItem<String>(
-                //       value: value,
-                //       child: Text(value),
-                //     );
-                //   }).toList(),
-                //   onChanged: (value) {
-                //     setState(() {
-                //       dropDownValue = value!;
-                //     });
-                //   },
-                // ),
-                DropdownMenu(
-                  menuStyle: const MenuStyle(
-                      // fixedSize: WidgetStatePropertyAll(Size.fromHeight(30)),
-                        backgroundColor: WidgetStatePropertyAll(
-                            Color.fromARGB(255, 185, 193, 235))),
-                    inputDecorationTheme: InputDecorationTheme(
-                        fillColor: Color.fromARGB(255, 144, 159, 242),
-                        filled: true,
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                  initialSelection: monthDropdownMenu[0],
-                  dropdownMenuEntries: monthDropdownMenu.map((value) {
-                    return DropdownMenuEntry(value: value, label: value);
+                DropdownButton<String>(
+                  value: selectedFilter,
+                  onChanged: (String? newValue) {
+                    int selectedType=0;
+                    if(newValue=="Date wise"){
+                      selectedType=0;
+                    } else if(newValue=="Month wise"){
+                      selectedType=1;
+                    } else if(newValue=="Year wise") {
+                      selectedType=2;
+                    } else {
+                      selectedType=3;
+                    }
+                    context.read<ExpenseBloc>().add(FetchFilteredExpenses(filterType: selectedType));
+                    setState(() {
+                      selectedFilter = newValue!;
+                    });
+                  },
+                  items: <String>["Date wise", "Month wise", "Year wise"].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
                   }).toList(),
-                )
+                ),
+                // DropdownMenu(
+                //   menuStyle: const MenuStyle(
+                //       // fixedSize: WidgetStatePropertyAll(Size.fromHeight(30)),
+                //         backgroundColor: WidgetStatePropertyAll(Color.fromARGB(255, 185, 193, 235))),
+                //     inputDecorationTheme: InputDecorationTheme(fillColor: Color.fromARGB(255, 144, 159, 242),
+                //         filled: true,
+                //         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                //   initialSelection: monthDropdownMenu[0],
+                //   dropdownMenuEntries: monthDropdownMenu.map((value) {
+                //     return DropdownMenuEntry(value: value, label: value);
+                //   }).toList(),
+                //   // onSelected: context.read<ExpenseBloc>().add(FetchFilteredExpenses(filterType: 0)),
+                // )
               ],
             ),
             const SizedBox(
@@ -284,21 +280,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 8),
             Expanded(
-              // child: ListView.builder(
-              //   itemCount: expenseList.length,
-              //   itemBuilder: (_, index) {
-              //     return ExpenseItem(
-              //       date: expenseList[index]['date'],
-              //       totalAmount: expenseList[index]['totalAmount'].toString(),
-              //       expenseItemDetails: expenseList[index]['items'],
-              //     );
-              //   },
-              // ),
               child: BlocBuilder<ExpenseBloc, ExpenseStateBloc>(builder: (ctx, state){
-                // List<ExpenseDataModel> allExpenses = state.expModel;
-                // return allExpenses.isNotEmpty ? ListView.builder(itemCount: allExpenses.length, itemBuilder: (_ , index){
-                //   return ExpenseItem(date: allExpenses[index].date.toString(), totalAmount: allExpenses[index].amount.toString(), expenseItemDetails: ExpenseDetails(icon: icon, title: title, description: description, amount: amount))
-                // }) : Center(child: Text('No expenses yet!!, Please add expenses'),);
                 if(state is  ExpenseLoadingState){
                   return Center(child: CircularProgressIndicator(),);
                 }
@@ -307,17 +289,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Center(child: Text(state.errorMessage),);
                 }
 
-                if(state is ExpenseLoadedState){
-                  List<ExpenseDataModel> allExpenses = state.expModel;
+                if(state is ExpenseFilterLoadedState){
+                  // filterExpenseDatewise(expenses: state.expModel);
+                  List<ExpenseFilterModel> allExpenses = state.mFilteredExpense;
                   return allExpenses.isNotEmpty ? ListView.builder(itemCount: allExpenses.length, itemBuilder: (_ , index){
-                    final expense = allExpenses[index];
-                    // return ExpenseItem(date: expense.date, totalAmount: expense.balance.toString(), expenseItemDetails: ExpenseDetails(icon: Image.asset(CategoryIcons.mCategory.where((eachCat){
-                    //   return eachCat.cId == expense.categoryId;
-                    // }).toList()[0].imageIcon), title: title, description: description, amount: amount));
-                    return ExpenseItem(date: df.format(DateTime.fromMillisecondsSinceEpoch(int.parse(expense.date))), totalAmount: expense.balance.toString(),);
+                    // final expense = allExpenses[index];
+                    return ExpenseItem(date: allExpenses[index].expenseType, totalAmount: allExpenses[index].balance, expenseItemDetails: allExpenses[index].allExpense);
                   }) : const Center(child: Text('No expenses yet!!, Please add expenses'),);
                 }
-
+                // If above if condition are fails then we execute empty container
                 return Container();
               }),
             ),

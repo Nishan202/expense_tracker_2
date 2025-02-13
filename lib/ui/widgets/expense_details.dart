@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:expense_tracker_2/data/remote/models/expense_data_model.dart';
+import 'package:expense_tracker_2/data/remote/models/expense_filter_model.dart';
 import 'package:flutter/material.dart';
 
 class ExpenseDetails extends StatelessWidget {
@@ -7,7 +9,7 @@ class ExpenseDetails extends StatelessWidget {
   // final Color? color;
   final String title;
   final String description;
-  final String amount;
+  final num amount;
   const ExpenseDetails(
       {super.key,
       required this.imageIcon,
@@ -60,7 +62,7 @@ class ExpenseDetails extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
-              color: Colors.red[400],
+              color: Colors.green[400]
             ),
           ),
         ],

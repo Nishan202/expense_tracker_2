@@ -146,7 +146,7 @@ class DBHelper {
     // var sprefer = await SharedPreferences.getInstance();
     // int uID = sprefer.getInt('UID') ?? 0;
     // List<Map<String, dynamic>> mData = await db.query(EXPENSE_TABLE, where: "$COLUMN_FK_USER_ID = ?", whereArgs: [uID]);
-    List<Map<String, dynamic>> mData = await db.query(EXPENSE_TABLE);
+    List<Map<String, dynamic>> mData = await db.query(EXPENSE_TABLE, orderBy: "$COLUMN_EXPENSE_DATE DESC");
     List<ExpenseDataModel> expenses = [];
     for(int i=0; i<mData.length; i++){
       ExpenseDataModel dataModel = ExpenseDataModel.fromMap(mData[i]);
