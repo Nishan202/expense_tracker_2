@@ -4,7 +4,6 @@ import 'package:expense_tracker_2/ui/widgets/expense_details.dart';
 import 'package:flutter/material.dart';
 
 class ExpenseItem extends StatelessWidget {
-  // List<Map<String, dynamic>> expenseItemDetails;
   List<ExpenseDataModel> expenseItemDetails;
   String date;
   num totalAmount;
@@ -38,7 +37,7 @@ class ExpenseItem extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '\$$totalAmount',
+                  totalAmount >= 0 ? '\$$totalAmount' : '- \$${totalAmount *-1}',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -65,6 +64,7 @@ class ExpenseItem extends StatelessWidget {
                     // color: expenseItemDetails[index]['color'],
                     title: expenseItemDetails[index].title,
                     description: expenseItemDetails[index].description,
+                    color: expenseItemDetails[index].expenseType == 'Debit' ? Colors.red[400] : Colors.green[400],
                     amount: expenseItemDetails[index].amount);
               },
             )

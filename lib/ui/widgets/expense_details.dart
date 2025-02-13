@@ -6,20 +6,23 @@ import 'package:flutter/material.dart';
 
 class ExpenseDetails extends StatelessWidget {
   final Image imageIcon;
-  // final Color? color;
+  final Color? color;
   final String title;
   final String description;
   final num amount;
   const ExpenseDetails(
       {super.key,
       required this.imageIcon,
-      // this.color,
+      this.color,
       required this.title,
       required this.description,
       required this.amount});
 
   @override
   Widget build(BuildContext context) {
+    // List<ExpenseDataModel> epd=[];
+    // List<String> type = epd.map((e) => e.expenseType).toList();
+    // print(type);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
@@ -58,11 +61,12 @@ class ExpenseDetails extends StatelessWidget {
             ),
           ),
           Text(
+            // type == 'Credit' ? '+ \$$amount' : '- \$$amount',
             '\$$amount',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
-              color: Colors.green[400]
+              color: color
             ),
           ),
         ],

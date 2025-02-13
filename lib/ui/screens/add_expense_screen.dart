@@ -2,6 +2,7 @@ import 'package:expense_tracker_2/data/remote/models/category_data_model.dart';
 import 'package:expense_tracker_2/data/remote/models/expense_data_model.dart';
 import 'package:expense_tracker_2/data/state_management/expense/expense_bloc.dart';
 import 'package:expense_tracker_2/data/state_management/expense/expense_event_bloc.dart';
+import 'package:expense_tracker_2/data/state_management/navigation/navigation_provider.dart';
 import 'package:expense_tracker_2/domain/asset_management.dart';
 import 'package:expense_tracker_2/ui/widgets/custom_button.dart';
 import 'package:expense_tracker_2/ui/widgets/custom_textfield.dart';
@@ -154,20 +155,29 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                     onClick: () async {
                       var prefs = await SharedPreferences.getInstance();
                       int uid = prefs.getInt('UID') ?? 0;
+
+                      // Store Last balance in preferences
+                      num lastBal =  prefs.getDouble('lastBalance') ?? 0.0;
+
+                      if(expenseType == 'Debit'){
+                        lastBal = lastBal - double.parse(_amountController.text);
+                      } else {
+                        lastBal = lastBal + double.parse(_amountController.text);
+                      }
                       context.read<ExpenseBloc>().add(AddExpenseData(
                               expenses: ExpenseDataModel(
                             title: _titleController.text,
                             description: _descriptionController.text,
                             amount: double.parse(_amountController.text),
                             // amount: _amountController.text.toString(),
-                            balance: 0,
+                            balance: lastBal.toDouble(),
                             date: (_selectedDate ?? DateTime.now()).millisecondsSinceEpoch.toString(),
                             expenseType: selectedExpenseType,
                             uId: uid,
                             categoryId: cateSelectedId
                           )));
-                          // Navigator.pop(context);
                           FocusScope.of(context).unfocus();
+                          context.read<NavigationProvider>().navIndex = 0;
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Expense is added, now go to home screen')));
                       // BlocProvider.of<ExpenseBloc>(context).add(AddExpenseData(expenses: expenses))
                     })),

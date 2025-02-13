@@ -136,17 +136,16 @@ class DBHelper {
   Future<bool> addExpense ({required ExpenseDataModel newExpense}) async {
     var db = await getDB();
 
-    int rowsEffected = await db.insert(EXPENSE_TABLE, newExpense.toMap());
+    int rowsEffected = await db.insert(EXPENSE_TABLE, newExpense.toMap(),);
     return rowsEffected > 0;
   }
 
   // Fetch data from database
   Future<List<ExpenseDataModel>> fetchAllExpenses() async {
     var db = await getDB();
-    // var sprefer = await SharedPreferences.getInstance();
-    // int uID = sprefer.getInt('UID') ?? 0;
-    // List<Map<String, dynamic>> mData = await db.query(EXPENSE_TABLE, where: "$COLUMN_FK_USER_ID = ?", whereArgs: [uID]);
-    List<Map<String, dynamic>> mData = await db.query(EXPENSE_TABLE, orderBy: "$COLUMN_EXPENSE_DATE DESC");
+    var sprefer = await SharedPreferences.getInstance();
+    int uID = sprefer.getInt('UID') ?? 0;
+    List<Map<String, dynamic>> mData = await db.query(EXPENSE_TABLE, orderBy: "$COLUMN_EXPENSE_DATE DESC", where: "$COLUMN_USER_ID = ?", whereArgs: [uID]);
     List<ExpenseDataModel> expenses = [];
     for(int i=0; i<mData.length; i++){
       ExpenseDataModel dataModel = ExpenseDataModel.fromMap(mData[i]);

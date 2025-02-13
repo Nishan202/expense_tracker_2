@@ -1,9 +1,12 @@
 import 'package:expense_tracker_2/data/database/db_helper.dart';
 import 'package:expense_tracker_2/data/state_management/auth/signup_bloc.dart';
 import 'package:expense_tracker_2/data/state_management/expense/expense_bloc.dart';
+import 'package:expense_tracker_2/data/state_management/navigation/navigation_provider.dart';
 import 'package:expense_tracker_2/domain/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path/path.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   // This is single bloc provider
@@ -13,6 +16,7 @@ void main() {
   runApp(MultiBlocProvider(providers: [
     BlocProvider(create: (context) => SignupBloc(dbHelper: DBHelper.getInstense())),
     BlocProvider(create: (context) => ExpenseBloc(dbHelper: DBHelper.getInstense())),
+    ChangeNotifierProvider(create: (context) => NavigationProvider()),
   ], child: const MyApp()));
 }
 

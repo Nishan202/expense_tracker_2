@@ -5,6 +5,7 @@ import 'package:expense_tracker_2/data/state_management/expense/expense_event_bl
 import 'package:expense_tracker_2/data/state_management/expense/expense_state_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ExpenseBloc extends Bloc<ExpenseEventBloc, ExpenseStateBloc> {
   DBHelper dbHelper;
@@ -21,6 +22,15 @@ class ExpenseBloc extends Bloc<ExpenseEventBloc, ExpenseStateBloc> {
       emit(ExpenseLoadingState());
       List<ExpenseDataModel> allExpenses = await dbHelper.fetchAllExpenses();
 
+      // Store Last balance in preferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      // prefs.setDouble('lastBalance', allExpenses.last.balance);
+      if(allExpenses.isNotEmpty){
+        prefs.setDouble('lastBalance', allExpenses.last.balance);
+      }else{
+        prefs.setDouble('lastBalance', 0.0);
+      }
+
       if(event.filterType == 0){
         df = DateFormat.yMMMd();
       } else if (event.filterType == 1) {
@@ -28,7 +38,7 @@ class ExpenseBloc extends Bloc<ExpenseEventBloc, ExpenseStateBloc> {
       } else if (event.filterType == 2) {
         df = DateFormat.y();
       }
-      emit(ExpenseFilterLoadedState(mFilteredExpense: filterExpense(allExpenses)));
+      emit(ExpenseFilterLoadedState(mFilteredExpense: filterExpense(allExpenses), bal: allExpenses.isNotEmpty ? allExpenses.last.balance : 0.0));
     });
 
     on<AddExpenseData>((event, emit) async {
@@ -36,8 +46,11 @@ class ExpenseBloc extends Bloc<ExpenseEventBloc, ExpenseStateBloc> {
       bool check = await dbHelper.addExpense(newExpense: event.expenses);
       if (check) {
         List<ExpenseDataModel> allExpenses = await dbHelper.fetchAllExpenses();
-        emit(ExpenseLoadedState(expModel: allExpenses));
-        emit(ExpenseFilterLoadedState(mFilteredExpense: filterExpense(allExpenses)));
+        // Store Last balance in preferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setDouble('lastBalance', allExpenses.last.balance);
+        // emit(ExpenseLoadedState(expModel: allExpenses));
+        emit(ExpenseFilterLoadedState(mFilteredExpense: filterExpense(allExpenses), bal: allExpenses.isNotEmpty ? allExpenses.last.balance : 0.0));
       } else {
         emit(ExpenseErrorState(errorMessage: "Expense not added"));
       }
