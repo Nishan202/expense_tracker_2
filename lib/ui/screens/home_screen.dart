@@ -111,59 +111,62 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    DropdownButton<String>(
-                      value: selectedFilter,
-                      onChanged: (String? newValue) {
-                        int selectedType = 0;
-                        if (newValue == "Date wise") {
-                          selectedType = 0;
-                        } else if (newValue == "Month wise") {
-                          selectedType = 1;
-                        } else if (newValue == "Year wise") {
-                          selectedType = 2;
-                        } else {
-                          selectedType = 3;
-                        }
-                        context.read<ExpenseBloc>().add(
-                            FetchFilteredExpenses(filterType: selectedType));
-                        setState(() {
-                          selectedFilter = newValue!;
-                        });
-                      },
-                      items: <String>["Date wise", "Month wise", "Year wise"]
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                    // DropdownMenu(
-                    //   menuStyle: const MenuStyle(
-                    //       // fixedSize: WidgetStatePropertyAll(Size.fromHeight(30)),
-                    //         backgroundColor: WidgetStatePropertyAll(Color.fromARGB(255, 185, 193, 235))),
-                    //     inputDecorationTheme: InputDecorationTheme(fillColor: Color.fromARGB(255, 144, 159, 242),
-                    //         filled: true,
-                    //         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
-                    //   initialSelection: selectedFilter,
-                    //   dropdownMenuEntries: monthDropdownMenu.map((value) {
-                    //     return DropdownMenuEntry(value: value, label: value);
-                    //   }).toList(),
-                    //   // onSelected: context.read<ExpenseBloc>().add(FetchFilteredExpenses(filterType: 0)),
-                    //   onSelected: (value){
+                    // DropdownButton<String>(
+                    //   value: selectedFilter,
+                    //   onChanged: (String? newValue) {
                     //     int selectedType = 0;
-                    //     if(value == 'Date wise'){
+                    //     if (newValue == "Date wise") {
                     //       selectedType = 0;
-                    //     } else if(value == 'Month wise'){
+                    //     } else if (newValue == "Month wise") {
                     //       selectedType = 1;
-                    //     } else if(value == 'Year wise'){
+                    //     } else if (newValue == "Year wise") {
                     //       selectedType = 2;
-                    //     } else{
+                    //     } else {
                     //       selectedType = 3;
                     //     }
-                    //     context.read<ExpenseBloc>().add(FetchFilteredExpenses(filterType: 0));
+                    //     context.read<ExpenseBloc>().add(
+                    //         FetchFilteredExpenses(filterType: selectedType));
+                    //     setState(() {
+                    //       selectedFilter = newValue!;
+                    //     });
                     //   },
+                    //   items: <String>["Date wise", "Month wise", "Year wise"]
+                    //       .map<DropdownMenuItem<String>>((String value) {
+                    //     return DropdownMenuItem<String>(
+                    //       value: value,
+                    //       child: Text(value),
+                    //     );
+                    //   }).toList(),
                     // ),
+                    DropdownMenu(
+                      menuStyle: const MenuStyle(
+                          // fixedSize: WidgetStatePropertyAll(Size.fromHeight(30)),
+                            backgroundColor: WidgetStatePropertyAll(Color.fromARGB(255, 185, 193, 235))),
+                        inputDecorationTheme: InputDecorationTheme(fillColor: Color.fromARGB(255, 144, 159, 242),
+                            filled: true,
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                      initialSelection: monthDropdownMenu[0],
+                      dropdownMenuEntries: monthDropdownMenu.map((value) {
+                        return DropdownMenuEntry(value: value, label: value);
+                      }).toList(),
+                      // onSelected: context.read<ExpenseBloc>().add(FetchFilteredExpenses(filterType: 0)),
+                      onSelected: (value){
+                        int selectedType = 0;
+                        if(value == 'Date wise'){
+                          selectedType = 0;
+                        } else if(value == 'Month wise'){
+                          selectedType = 1;
+                        } else if(value == 'Year wise'){
+                          selectedType = 2;
+                        } else{
+                          selectedType = 3;
+                        }
+                        context.read<ExpenseBloc>().add(FetchFilteredExpenses(filterType: selectedType));
+                        setState(() {
+                          selectedFilter = value!;
+                        });
+                      },
+                    ),
                   ],
                 ),
                 const SizedBox(

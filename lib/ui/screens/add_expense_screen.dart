@@ -103,16 +103,13 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                 // Expanded(
                 DropdownMenu(
                   menuHeight: 250,
-                  onSelected: (CategoryDataModel? value) {
-                    cateSelectedId = value!.cId;
-                    // selectedCategoryType = value.title;
-                  },
+                  onSelected: (CategoryDataModel? value) => cateSelectedId = value!.cId,
                   // width: double.infinity,
                   menuStyle: const MenuStyle(
                       // fixedSize: WidgetStatePropertyAll(10),
                       backgroundColor: WidgetStatePropertyAll(
                           Color.fromARGB(255, 185, 193, 235))),
-                  // initialSelection: ,
+                  // initialSelection: CategoryIcons.mCategory[0].title[0],
                   inputDecorationTheme: InputDecorationTheme(
                       fillColor: const Color.fromARGB(255, 144, 159, 242),
                       filled: true,
