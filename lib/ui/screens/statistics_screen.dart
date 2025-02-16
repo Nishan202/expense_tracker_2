@@ -1,4 +1,7 @@
+import 'package:d_chart/commons/axis/axis.dart';
+import 'package:d_chart/commons/config_render/config_render.dart';
 import 'package:d_chart/commons/data_model/data_model.dart';
+import 'package:d_chart/commons/style/style.dart';
 import 'package:d_chart/ordinal/bar.dart';
 import 'package:expense_tracker_2/data/remote/models/expense_filter_model.dart';
 import 'package:expense_tracker_2/data/state_management/expense/expense_bloc.dart';
@@ -220,27 +223,51 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   }).toList(),)
                 ],
               ),
-              Text(
-                'Limit \$900 / week',
-                style: TextStyle(fontSize: 16, color: Colors.black),
-              ),
+              // Text(
+              //   'Limit \$900 / week',
+              //   style: TextStyle(fontSize: 16, color: Colors.black),
+              // ),
               SizedBox(
-                height: 250,
+                height: 30,
               ),
               // Bar chart
-              // BlocBuilder<ExpenseBloc, ExpenseStateBloc>(builder: (ctx, state){
-              //   if(state is ExpenseFilterLoadedState){
-              //     List<OrdinalGroup> mList = [];
-              //     OrdinalGroup singleData;
-              //     for(ExpenseFilterModel eachFilterModel in state.mFilteredExpense){
-              //       // mList.add(OrdinalGroup(id: eachFilterModel.expenseType, data: eachFilterModel.balance));
-              //       singleData
-              //     }
-              //     mList.add(singleData);
-              //     return AspectRatio(aspectRatio: 16/9 , child: DChartBarO(groupList: ),);
-              //   }
-              //   return Container();
-              // }),
+              BlocBuilder<ExpenseBloc, ExpenseStateBloc>(builder: (ctx, state){
+                if(state is ExpenseFilterLoadedState){
+                  List<OrdinalGroup> mGroupList = [];
+                  List<OrdinalData> mList = [];
+                  
+                  for(ExpenseFilterModel eachFilterModel in state.mFilteredExpense){
+                    mList.add(OrdinalData(domain: eachFilterModel.expenseType, measure: eachFilterModel.balance*-1)); // balance is comming in negative value for that reason graph is showing top to bottom heading, to fix this we have multiply balance with -1
+                  }
+                  OrdinalGroup singleData = OrdinalGroup(id: '1', data: mList, color: Colors.blue);
+                  mGroupList.add(singleData);
+                  return AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: DChartBarO(
+                        animate: true,
+                        configRenderBar: ConfigRenderBar(
+                          barGroupInnerPaddingPx: 0,
+                          radius: 6,
+                        ),
+                        measureAxis: MeasureAxis(
+                          showLine: true,
+                        ),
+                        vertical: true,
+                        domainAxis: DomainAxis(
+                          useGridLine: true,
+                            showLine: true,
+                            tickLength: 0,
+                            gapAxisToLabel: 12,
+                            labelStyle: LabelStyle(
+                                color: Colors.grey.shade400,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14)),
+                        groupList: mGroupList),
+                  );
+                }
+                return Container();
+              }),
+              const SizedBox(height: 30,),
               Text(
                 'Spending Details',
                 style: TextStyle(

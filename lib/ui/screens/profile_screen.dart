@@ -57,7 +57,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 leading: CircleAvatar(child: Icon(Icons.person)),
                 title: Text("Name"),
                 subtitle: Text(allData[index].name, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),),
-                trailing: IconButton(onPressed: (){}, icon: Icon(Icons.edit)),
+                // trailing: IconButton(onPressed: (){}, icon: Icon(Icons.edit)),
               ),
               ListTile(
                 leading: CircleAvatar(child: Icon(Icons.email),),
@@ -68,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 leading: CircleAvatar(child: Icon(Icons.phone),),
                 title: Text("Phone No"),
                 subtitle: Text(allData[index].phoneNo.toString(), style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),),
-                trailing: IconButton(onPressed: (){}, icon: Icon(Icons.edit)),
+                // trailing: IconButton(onPressed: (){}, icon: Icon(Icons.edit)),
               )
             ],
           );

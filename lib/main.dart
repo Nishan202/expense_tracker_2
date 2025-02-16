@@ -5,7 +5,6 @@ import 'package:expense_tracker_2/data/state_management/navigation/navigation_pr
 import 'package:expense_tracker_2/domain/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 void main() {

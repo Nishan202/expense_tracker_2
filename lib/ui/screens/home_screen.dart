@@ -22,7 +22,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // List<String> monthDropdownMenu = <String>['Date wise', 'Month wise', 'Year wise']; // for expense type
+  List<String> monthDropdownMenu = <String>['Date wise', 'Month wise', 'Year wise']; // for expense type
   String selectedFilter = "Date wise";
   List<ExpenseFilterModel> filteredExpenses = [];
   DateFormat df = DateFormat.yMMMd();
@@ -145,12 +145,25 @@ class _HomeScreenState extends State<HomeScreen> {
                     //     inputDecorationTheme: InputDecorationTheme(fillColor: Color.fromARGB(255, 144, 159, 242),
                     //         filled: true,
                     //         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
-                    //   initialSelection: monthDropdownMenu[0],
+                    //   initialSelection: selectedFilter,
                     //   dropdownMenuEntries: monthDropdownMenu.map((value) {
                     //     return DropdownMenuEntry(value: value, label: value);
                     //   }).toList(),
                     //   // onSelected: context.read<ExpenseBloc>().add(FetchFilteredExpenses(filterType: 0)),
-                    // )
+                    //   onSelected: (value){
+                    //     int selectedType = 0;
+                    //     if(value == 'Date wise'){
+                    //       selectedType = 0;
+                    //     } else if(value == 'Month wise'){
+                    //       selectedType = 1;
+                    //     } else if(value == 'Year wise'){
+                    //       selectedType = 2;
+                    //     } else{
+                    //       selectedType = 3;
+                    //     }
+                    //     context.read<ExpenseBloc>().add(FetchFilteredExpenses(filterType: 0));
+                    //   },
+                    // ),
                   ],
                 ),
                 const SizedBox(
@@ -173,8 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     }
                     if (state is ExpenseFilterLoadedState) {
-                      List<ExpenseFilterModel> allExpenses =
-                          state.mFilteredExpense;
+                      List<ExpenseFilterModel> allExpenses = state.mFilteredExpense;
                       return allExpenses.isNotEmpty
                           ? Column(
                               children: [
@@ -201,9 +213,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                           SizedBox(height: 8),
                                           Text(
-                                            state.bal >= 0
-                                                ? '\$${state.bal}'
-                                                : "- \$${state.bal * -1}",
+                                            // state.bal >= 0 ? '\$${state.bal}' : "- \$${state.bal * -1}",
+                                            '\$${state.bal}',
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 32,

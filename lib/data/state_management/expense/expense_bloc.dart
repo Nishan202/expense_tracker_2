@@ -38,7 +38,7 @@ class ExpenseBloc extends Bloc<ExpenseEventBloc, ExpenseStateBloc> {
       } else if (event.filterType == 2) {
         df = DateFormat.y();
       }
-      emit(ExpenseFilterLoadedState(mFilteredExpense: filterExpense(allExpenses), bal: allExpenses.isNotEmpty ? allExpenses.last.balance : 0.0));
+      emit(ExpenseFilterLoadedState(mFilteredExpense: filterExpense(allExpenses), bal: allExpenses.isNotEmpty ? allExpenses.last.balance : 0));
     });
 
     on<AddExpenseData>((event, emit) async {
@@ -49,8 +49,7 @@ class ExpenseBloc extends Bloc<ExpenseEventBloc, ExpenseStateBloc> {
         // Store Last balance in preferences
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setDouble('lastBalance', allExpenses.last.balance);
-        // emit(ExpenseLoadedState(expModel: allExpenses));
-        emit(ExpenseFilterLoadedState(mFilteredExpense: filterExpense(allExpenses), bal: allExpenses.isNotEmpty ? allExpenses.last.balance : 0.0));
+        emit(ExpenseFilterLoadedState(mFilteredExpense: filterExpense(allExpenses), bal: allExpenses.isNotEmpty ? allExpenses.last.balance : 0));
       } else {
         emit(ExpenseErrorState(errorMessage: "Expense not added"));
       }
