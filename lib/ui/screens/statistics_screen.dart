@@ -32,6 +32,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     'Year'
   ];
 
+  String selectedFilter = "Date wise";
 
   List<Map<String, dynamic>> expeseDetails = [
     {
@@ -109,10 +110,38 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   //   },
                   // ),
                   DropdownMenu(
-                    initialSelection: monthDropdownMenu[0],
-                    dropdownMenuEntries: monthDropdownMenu.map((value) {
+                    menuStyle: const MenuStyle(
+                        backgroundColor: WidgetStatePropertyAll(
+                            Color.fromARGB(255, 185, 193, 235))),
+                    inputDecorationTheme: InputDecorationTheme(
+                        fillColor: Color.fromARGB(255, 144, 159, 242),
+                        filled: true,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                    initialSelection: graphDropdownMenu[0],
+                    dropdownMenuEntries: graphDropdownMenu.map((value) {
                       return DropdownMenuEntry(value: value, label: value);
                     }).toList(),
+                    // onSelected: (value) {
+                    //   int selectedType = 0;
+                    //   if (value == 'Date wise') {
+                    //     selectedType = 0;
+                    //   } else if (value == 'Month wise') {
+                    //     selectedType = 1;
+                    //   } else if (value == 'Year wise') {
+                    //     selectedType = 2;
+                    //   } else {
+                    //     selectedType = 3;
+                    //   }
+                    //   context
+                    //       .read<ExpenseBloc>()
+                    //       .add(FetchFilteredExpenses(filterType: selectedType));
+                    //   setState(
+                    //     () {
+                    //       selectedFilter = value!;
+                    //     }
+                    //   );
+                    // }
                   )
                 ],
               ),
@@ -204,23 +233,37 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                     'Expense breakdown',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
-                  // DropdownButton<String>(
-                  //   value: dropDownValue,
-                  //   items: month.map<DropdownMenuItem<String>>((String value) {
-                  //     return DropdownMenuItem<String>(
-                  //       value: value,
-                  //       child: Text(value),
-                  //     );
-                  //   }).toList(),
-                  //   onChanged: (value) {
-                  //     setState(() {
-                  //       dropDownValue = value!;
-                  //     });
-                  //   },
-                  // ),
-                  DropdownMenu(initialSelection: graphDropdownMenu[0], dropdownMenuEntries: graphDropdownMenu.map((value){
-                    return DropdownMenuEntry(value: value, label: value);
-                  }).toList(),)
+                  DropdownMenu(
+                    menuStyle: const MenuStyle(
+                        backgroundColor: WidgetStatePropertyAll(
+                            Color.fromARGB(255, 185, 193, 235))),
+                    inputDecorationTheme: InputDecorationTheme(
+                        fillColor: Color.fromARGB(255, 144, 159, 242),
+                        filled: true,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                    initialSelection: graphDropdownMenu[0],
+                    dropdownMenuEntries: graphDropdownMenu.map((value) {
+                      return DropdownMenuEntry(value: value, label: value);
+                    }).toList(),
+                    onSelected: (value) {
+                      int selectedType = 0;
+                      if (value == 'Date wise') {
+                        selectedType = 0;
+                      } else if (value == 'Month wise') {
+                        selectedType = 1;
+                      } else if (value == 'Year wise') {
+                        selectedType = 2;
+                      } else {
+                        selectedType = 3;
+                      }
+                      context.read<ExpenseBloc>().add(FetchFilteredExpenses(filterType: selectedType));
+                      setState(() {
+                          selectedFilter = value!;
+                        }
+                      );
+                    }
+                  )
                 ],
               ),
               // Text(

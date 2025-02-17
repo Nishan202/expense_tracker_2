@@ -1,12 +1,9 @@
-import 'package:expense_tracker_2/data/remote/models/expense_data_model.dart';
 import 'package:expense_tracker_2/data/remote/models/expense_filter_model.dart';
-import 'package:expense_tracker_2/data/remote/models/user_data_model.dart';
 import 'package:expense_tracker_2/data/state_management/auth/signup_bloc.dart';
 import 'package:expense_tracker_2/data/state_management/auth/signup_state_bloc.dart';
 import 'package:expense_tracker_2/data/state_management/expense/expense_bloc.dart';
 import 'package:expense_tracker_2/data/state_management/expense/expense_event_bloc.dart';
 import 'package:expense_tracker_2/data/state_management/expense/expense_state_bloc.dart';
-import 'package:expense_tracker_2/ui/widgets/expense_details.dart';
 import 'package:expense_tracker_2/ui/widgets/expense_item.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_tracker_2/domain/asset_management.dart';
@@ -283,13 +280,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         itemCount: allExpenses.length,
                                         itemBuilder: (_, index) {
                                           return ExpenseItem(
-                                              date: allExpenses[index]
-                                                  .expenseType,
-                                              totalAmount:
-                                                  allExpenses[index].balance,
-                                              expenseItemDetails:
-                                                  allExpenses[index]
-                                                      .allExpense);
+                                              date: allExpenses[index].expenseType,
+                                              totalAmount: allExpenses[index].balance,
+                                              expenseItemDetails: allExpenses[index].allExpense);
                                           // }) : const Center(child: Text('No expenses yet!!, Please add expenses'),);
                                         }))
                               ],

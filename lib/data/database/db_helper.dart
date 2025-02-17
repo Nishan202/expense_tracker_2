@@ -109,9 +109,10 @@ class DBHelper {
 
     // to manage session store UID in shared preference
     if(userData.isNotEmpty){
-      var preference = await SharedPreferences.getInstance();
-      preference.setInt('UID', userData[0][COLUMN_USER_ID]);
+      // var preference = await SharedPreferences.getInstance();
+      // preference.setInt('UID', userData[0][COLUMN_USER_ID]);
       // preference.setInt('username', userData[0][U]);
+      setUID(UserDataModel.fromMap(userData[0]).uId);
     }
     return userData.isNotEmpty;
   }
@@ -135,7 +136,10 @@ class DBHelper {
   // Add expenses
   Future<bool> addExpense ({required ExpenseDataModel newExpense}) async {
     var db = await getDB();
-
+    // var sprefer = await SharedPreferences.getInstance();
+    // int uID = sprefer.getInt('UID') ?? 0;
+    int uid = await getUID();
+    newExpense.uId = uid;
     int rowsEffected = await db.insert(EXPENSE_TABLE, newExpense.toMap(),);
     return rowsEffected > 0;
   }
@@ -145,6 +149,7 @@ class DBHelper {
     var db = await getDB();
     var sprefer = await SharedPreferences.getInstance();
     int uID = sprefer.getInt('UID') ?? 0;
+    // int uID = await getUID();
     List<Map<String, dynamic>> mData = await db.query(EXPENSE_TABLE, orderBy: "$COLUMN_EXPENSE_DATE DESC", where: "$COLUMN_USER_ID = ?", whereArgs: [uID]);
     List<ExpenseDataModel> expenses = [];
     for(int i=0; i<mData.length; i++){
@@ -152,5 +157,17 @@ class DBHelper {
       expenses.add(dataModel);
     }
     return expenses;
+  }
+
+  // get UID
+  Future<int> getUID() async{
+    var sprefer = await SharedPreferences.getInstance();
+    return sprefer.getInt('UID')!;
+  }
+
+  // set UID
+  void setUID(int uid) async{
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setInt("UID", uid);
   }
 }

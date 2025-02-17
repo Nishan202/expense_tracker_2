@@ -2,6 +2,7 @@ import 'package:expense_tracker_2/data/remote/models/user_data_model.dart';
 import 'package:expense_tracker_2/data/state_management/auth/signup_bloc.dart';
 import 'package:expense_tracker_2/data/state_management/auth/signup_event_bloc.dart';
 import 'package:expense_tracker_2/data/state_management/auth/signup_state_bloc.dart';
+import 'package:expense_tracker_2/data/state_management/navigation/navigation_provider.dart';
 import 'package:expense_tracker_2/domain/app_routes.dart';
 import 'package:expense_tracker_2/domain/asset_management.dart';
 import 'package:flutter/material.dart';
@@ -36,8 +37,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               var preference = await SharedPreferences.getInstance();
               preference.setInt('UID', 0);
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('User successfully logged out!! please Log in now')));
-              Navigator.pop(context);
+              // Navigator.pop(context);
+              context.read<NavigationProvider>().navIndex = 0;
               Navigator.pushReplacementNamed(context, AppRoutes.LOGIN_SCREEN_ROUTE);
+
             }, icon: Icon(Icons.exit_to_app_rounded)),
           ],
         )
