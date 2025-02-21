@@ -213,8 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                           SizedBox(height: 8),
                                           Text(
-                                            // state.bal >= 0 ? '\$${state.bal}' : "- \$${state.bal * -1}",
-                                            '\$${state.bal}',
+                                            state.bal >= 0 ? '\$${state.bal}' : "- \$${state.bal * -1}",
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 32,

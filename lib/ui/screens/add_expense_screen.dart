@@ -155,12 +155,13 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
                       // Store Last balance in preferences
                       num lastBal =  prefs.getDouble('lastBalance') ?? 0.0;
-
-                      if(expenseType == 'Debit'){
+                      // print(lastBal);
+                      if(selectedExpenseType == 'Debit'){
                         lastBal = lastBal - double.parse(_amountController.text);
                       } else {
                         lastBal = lastBal + double.parse(_amountController.text);
                       }
+// print(lastBal);
                       context.read<ExpenseBloc>().add(AddExpenseData(
                               expenses: ExpenseDataModel(
                             title: _titleController.text,
